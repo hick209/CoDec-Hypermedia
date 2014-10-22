@@ -3,6 +3,10 @@
 #include <iostream>
 #include <string>
 
+#include "Huffman.h"
+#include "Differencial.h"
+#include "Transform.h"
+#include "Decompression.h"
 
 #define USAGE "\
 Usage: " PROGRAM_NAME " OPTION FILE\n\
@@ -16,7 +20,7 @@ OPTION specify decompression or the type of compression algorithm.\n\
 Compress options:\n\
   --huff    Huffman compression\n\
   --diff    Differencial compression\n\
-  --trans   Tranform compression\n\
+  --trans   Transform compression\n\
 \n\
 Decompress option:\n\
   --dec     Decompress a .fuf file\n\
@@ -48,20 +52,20 @@ int main(int argc, char** argv) {
 
 
     if (option == "--huff") {
-        // TODO
         cout << "Applying Huffman to file " << filename << endl;
+        huffmanCompress(filename.c_str(), noExtentionFilename.c_str());
     }
     else if (option == "--diff") {
-        // TODO
         cout << "Applying Differencial to file " << filename << endl;
+        differencialCompress(filename.c_str(), noExtentionFilename.c_str());
     }
     else if (option == "--trans") {
-        // TODO
-        cout << "Applying Tranform to file " << filename << endl;
+        cout << "Applying Transform to file " << filename << endl;
+        transformCompress(filename.c_str(), noExtentionFilename.c_str());
     }
     else if (option == "--dec") {
-        // TODO
         cout << "Decompressing file " << filename << endl;
+        decompression(filename.c_str(), noExtentionFilename.c_str());
     }
 
     return EXIT_SUCCESS;
