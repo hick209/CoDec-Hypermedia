@@ -2,13 +2,10 @@
 
 #include <stdio.h>
 #include "Utils.h"
+#include "WaveReader.h"
 
 
 void differencialCompress(const char* filename, const char* filenameExtensionLess) {
-    FILE* file = fopen(filename, "r");
-
-    // TODO
-
-    fclose(file);
+    WaveReader reader(filename);
 }
 
