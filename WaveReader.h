@@ -26,7 +26,7 @@ struct WaveInfo {
 struct WaveData {
 	int   channelCount;
 	int** data;
-	int*  dataLength;
+	int   dataLength;
 };
 
 

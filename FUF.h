@@ -3,10 +3,7 @@
 
 #include <stdio.h>
 #include "WaveReader.h"
-#include "Huffman.h"
-#include "Differencial.h"
-#include "Transform.h"
-#include "Decompression.h"
+
 
 class FUF {
 private:

@@ -13,4 +13,10 @@
  */
 void printWavInfo(WaveInfo);
 
+/**
+ *  Print wav data
+ */
+void printWavData(WaveData);
+
+
 #endif // UTILS_H

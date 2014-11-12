@@ -19,3 +19,18 @@ void printWavInfo(WaveInfo info) {
 	cout << "Data Block    : " << info.formatBlockAlign << endl;
 	cout << "Data Size     : " << info.dataSize << endl;
 }
+
+
+void printWavData(WaveData d) {
+	cout << " Wave Data " << endl;
+	cout << "===========" << endl;
+
+	const int SAMPLES = 20;
+	for (int j = 0; j < d.channelCount; j++) {
+		cout << "Channel " << j << ":";
+		for (int i = 0; i < SAMPLES; i++) {
+			printf(" %4d", d.data[j][i]);
+		}
+		cout << endl;
+	}
+}
