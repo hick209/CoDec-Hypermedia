@@ -13,13 +13,13 @@ int** frequencyInOrder(int* channel, int dataLength){
 	aux = channel(0);
 	
 	for(i=0;i<dataLength;i++) {
-			
+				if(aux == channel(i)) count++;
 	}
 	
 } 
 
 void buildTree(WaveReader sample){
-	vector< 
+ 
 }
 
 void FUF::huffmanCompress() {
