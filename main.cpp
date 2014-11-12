@@ -3,10 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "Huffman.h"
-#include "Differencial.h"
-#include "Transform.h"
-#include "Decompression.h"
+#include "FUF.h"
 
 #define USAGE "\
 Usage: " PROGRAM_NAME " OPTION FILE\n\
@@ -50,22 +47,24 @@ int main(int argc, char** argv) {
     string noExtentionFilename = filename.substr(0, filename.find_last_of("."));
     cout << noExtentionFilename << endl;
 
+	// Object Instance
+	FUF sample(filename.c_str(), noExtentionFilename.c_str());
 
     if (option == "--huff") {
         cout << "Applying Huffman to file " << filename << endl;
-        huffmanCompress(filename.c_str(), noExtentionFilename.c_str());
+        sample.huffmanCompress();
     }
     else if (option == "--diff") {
         cout << "Applying Differencial to file " << filename << endl;
-        differencialCompress(filename.c_str(), noExtentionFilename.c_str());
+		sample.differencialCompress();
     }
     else if (option == "--trans") {
         cout << "Applying Transform to file " << filename << endl;
-        transformCompress(filename.c_str(), noExtentionFilename.c_str());
+        sample.transformCompress();
     }
     else if (option == "--dec") {
         cout << "Decompressing file " << filename << endl;
-        decompression(filename.c_str(), noExtentionFilename.c_str());
+        sample.decompression();
     }
 
     return EXIT_SUCCESS;
