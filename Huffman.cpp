@@ -7,12 +7,11 @@ using namespace std;
 
 //Return the frenquency in order of each caracter
 int** frequencyInOrder(WaveData sample){
-	vector<vector<>> frequency;
-	
-	for(i=0; i<sample.
+	vector< vector<int> > frequency;
 	
 	
-}
+	
+} 
 
 void buildTree(){
 
