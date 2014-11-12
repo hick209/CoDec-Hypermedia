@@ -24,9 +24,9 @@ struct WaveInfo {
 
 
 struct WaveData {
-	int    channelCount;
-	char** data;
-	int*   dataLength;
+	int   channelCount;
+	int** data;
+	int*  dataLength;
 };
 
 
@@ -61,13 +61,16 @@ private:
 
 	int readInt32();
 	int readInt16();
+	int readInt8();
+
+	int readSample(int bytes);
 
 	WaveInfo readHeader();
-	WaveData getData();
+	WaveData readData();
 
 public:
 	WaveInfo info;
-	WaveInfo data;
+	WaveData data;
 
 	WaveReader(const char* filename);
 	~WaveReader();

@@ -9,6 +9,14 @@ WaveReader::~WaveReader() {
 	fclose(mWavFile);
 }
 
+void WaveReader::readWav() {
+	printf("Reading header...\n");
+	info = readHeader();
+	printf("Reading data...\n");
+	data = readData();
+}
+
+
 int WaveReader::readInt32() {
 	int data = 0;
 	char buffer[4];
@@ -37,6 +45,29 @@ int WaveReader::readInt16() {
 	return data;
 }
 
+int WaveReader::readInt8() {
+	int data = 0;
+	char buffer[1];
+	fread(buffer, 2, 1, mWavFile);
+
+	data = 0x00ff & buffer[0];
+
+	return data;
+}
+
+int WaveReader::readSample(int bytes) {
+	switch (bytes) {
+		case 1:
+			return readInt8();
+		case 2:
+			return readInt16();
+		case 4:
+			return readInt32();
+	}
+
+	return 0;
+}
+
 
 WaveInfo WaveReader::readHeader() {
 	int  chunkId   = 0;
@@ -48,6 +79,7 @@ WaveInfo WaveReader::readHeader() {
 	    chunkId = readInt32();
 	    switch (chunkId) {
 		    case FORMAT:
+		    	printf("Format\n");
 		        info.formatSize = readInt32();
 		        info.format = readInt16();
 		        info.channels = readInt16();
@@ -64,18 +96,21 @@ WaveInfo WaveReader::readHeader() {
 		        break;
 
 		    case RIFF_HEADER:
+		    	printf("Riff Header\n");
 		        info.headerId = chunkId;
 		        info.memSize = readInt32();
 		        info.riffStyle = readInt32();
 		        break;
 
 		    case DATA:
+		    	printf("Data\n");
 		        dataChunk = true;
 		        info.dataSize = readInt32();
 		        break;
 
 		    default:
 		        int skipSize = readInt32();
+		        printf("Skip Size = %d\n", skipSize);
 		        fseek(mWavFile, skipSize, SEEK_CUR);
 		        break;
 	    }
@@ -85,20 +120,33 @@ WaveInfo WaveReader::readHeader() {
 }
 
 
-WaveData WaveReader::getData() {
+WaveData WaveReader::readData() {
 	WaveData data;
 	data.channelCount = info.channelCount;
 
 	data.dataLength = new int[data.channelCount];
-	data.data = new char*[data.channelCount];
+	data.data = new int*[data.channelCount];
+	for (int i = 0; i < data.channelCount; i++) {
+		data.data[i] = new int[info.dataSize / data.channelCount];
+	}
 
-	// TODO
+	int bytesPerSample;
+
+	switch (info.format) {
+		case PULSE_CODE_MODULATION:
+		case EXTENSIBLE:
+		default:
+			bytesPerSample = info.bitDepth / info.channelCount;
+			break;
+	}
+
+	int byteCount = info.dataSize / data.channelCount;
+	for (int i = 0; i < byteCount; i++) {
+		for (int j = 0; j < info.channelCount; j++) {
+			data.data[j][i] = readSample(bytesPerSample);
+		}
+	}
 
 	return data;
 }
 
-
-void WaveReader::readWav() {
-	info = readHeader();
-	data = readData();
-}
