@@ -1,6 +1,12 @@
 #ifndef HUFFMAN_H
 #define HUFFMAN_H
 
-void huffmanCompress(const char* filename, const char* filenameExtensionLess);
+struct HuffmanCodeMatrix {
+	int 	columnsCount;
+	int		linesCount;   
+	int** codeMatrix;
+};
+
+void FUF::huffmanCompress(){}
 
 #endif // HUFFMAN_H

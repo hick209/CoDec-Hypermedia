@@ -3,10 +3,14 @@
 #include "Utils.h"
 #include "WaveReader.h"
 
+using namespace std;
 
 //Return the frenquency in order of each caracter
-void frequencyInOrder(){
-	std::vector<>
+int** frequencyInOrder(WaveData sample){
+	vector<vector<>> frequency;
+	
+	for(i=0; i<sample.
+	
 	
 }
 
@@ -14,9 +18,8 @@ void buildTree(){
 
 }
 
-void huffmanCompress(const char* filename, const char* filenameExtensionLess) {
-	WaveReader reader(filename);
-
-	printWavInfo(reader.info);
+void FUF::huffmanCompress() {
+	frequencyInOrder(sample.data);
+	printWavInfo(sample.info);
 }
 
