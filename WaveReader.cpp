@@ -4,6 +4,7 @@
 WaveReader::WaveReader(const char* filename) {
 	mWavFile = fopen(filename, "rb");
 }
+
 WaveReader::~WaveReader() {
 	fclose(mWavFile);
 }
