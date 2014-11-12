@@ -3,22 +3,35 @@
 
 WaveReader::WaveReader(const char* filename) {
 	mWavFile = fopen(filename, "rb");
-	info = readHeader();
 }
 WaveReader::~WaveReader() {
 	fclose(mWavFile);
 }
 
 int WaveReader::readInt32() {
-	int data;
-	fread(&data, 4, 1, mWavFile);
+	int data = 0;
+	char buffer[4];
+	fread(buffer, 4, 1, mWavFile);
+
+	data = 0x00ff & buffer[3];
+	data = data << 8;
+	data += 0x00ff & buffer[2];
+	data = data << 8;
+	data += 0x00ff & buffer[1];
+	data = data << 8;
+	data += 0x00ff & buffer[0];
 
 	return data;
 }
 
 int WaveReader::readInt16() {
-	int data;
-	fread(&data, 2, 1, mWavFile);
+	int data = 0;
+	char buffer[2];
+	fread(buffer, 2, 1, mWavFile);
+
+	data = 0x00ff & buffer[1];
+	data = data << 8;
+	data += 0x00ff & buffer[0];
 
 	return data;
 }
@@ -68,4 +81,23 @@ WaveInfo WaveReader::readHeader() {
 	}
 
 	return info;
+}
+
+
+WaveData WaveReader::getData() {
+	WaveData data;
+	data.channelCount = info.channelCount;
+
+	data.dataLength = new int[data.channelCount];
+	data.data = new char*[data.channelCount];
+
+	// TODO
+
+	return data;
+}
+
+
+void WaveReader::readWav() {
+	info = readHeader();
+	data = readData();
 }

@@ -23,6 +23,13 @@ struct WaveInfo {
 };
 
 
+struct WaveData {
+	int    channelCount;
+	char** data;
+	int*   dataLength;
+};
+
+
 class WaveReader {
 private:
 	enum WavChunks {
@@ -56,13 +63,16 @@ private:
 	int readInt16();
 
 	WaveInfo readHeader();
+	WaveData getData();
 
 public:
 	WaveInfo info;
-
+	WaveInfo data;
 
 	WaveReader(const char* filename);
 	~WaveReader();
+
+	void readWav();
 };
 
 

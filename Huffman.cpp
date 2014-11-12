@@ -7,5 +7,7 @@
 
 void huffmanCompress(const char* filename, const char* filenameExtensionLess) {
 	WaveReader reader(filename);
+
+	printWavInfo(reader.info);
 }
 
