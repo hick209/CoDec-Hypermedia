@@ -6,7 +6,7 @@
 
 //Return the frenquency in order of each caracter
 void frequencyInOrder(){
-	std::vector
+	std::vector<>
 	
 }
 
