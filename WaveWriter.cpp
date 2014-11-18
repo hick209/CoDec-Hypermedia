@@ -16,29 +16,29 @@ void WaveWriter::writeWav(const char* filename) {
 }
 
 void WaveWriter::writeInt32(int data) {
-  char buffer[4];
+  unsigned char buffer[4];
 
-	buffer[0] = (char)(0x000000ff & data);
-	buffer[1] = (char)((0x0000ff00 & data) >>  8);
-	buffer[2] = (char)((0x00ff0000 & data) >> 16);
-	buffer[3] = (char)((0xff000000 & data) >> 24);
+	buffer[0] = (0x000000ff & data) >>  0;
+	buffer[1] = (0x0000ff00 & data) >>  8;
+	buffer[2] = (0x00ff0000 & data) >> 16;
+	buffer[3] = (0xff000000 & data) >> 24;
 
   fwrite(buffer, 4, 1, mFile);
 }
 
 void WaveWriter::writeInt16(int data) {
-  char buffer[2];
+  unsigned char buffer[2];
 
-	buffer[0] = (char)(0x000000ff & data);
-	buffer[1] = (char)((0x0000ff00 & data) >>  8);
+	buffer[0] = (0x000000ff & data) >> 0;
+	buffer[1] = (0x0000ff00 & data) >> 8;
 
   fwrite(buffer, 2, 1, mFile);
 }
 
 void WaveWriter::writeInt8(int data) {
-  char buffer[1];
+  unsigned char buffer[1];
 
-	buffer[0] = (char)(0x000000ff & data);
+	buffer[0] = (0x000000ff & data);
 
   fwrite(buffer, 1, 1, mFile);
 }
@@ -59,13 +59,12 @@ void WaveWriter::write(int bytes, int data) {
 
 void WaveWriter::writeHeader() {  
     // RIFF_HEADER
-    if (mInfo.headerId == RIFF_HEADER) {
-        writeInt32(mInfo.headerId);
-        writeInt32(mInfo.memSize);
-        writeInt32(mInfo.riffStyle);
-    }
+    writeInt32(mInfo.headerId);
+    writeInt32(mInfo.memSize);
+    writeInt32(mInfo.riffStyle);
 
     // FORMAT
+    writeInt32(FORMAT);
     writeInt32(mInfo.formatSize);
     writeInt16(mInfo.format);
     writeInt16(mInfo.channels);
