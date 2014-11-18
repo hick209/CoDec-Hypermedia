@@ -11,7 +11,15 @@ DEFINES = -DPROGRAM_NAME=\"$(PROGRAM_NAME)\"
 
 bin = main
 
-algorithms = WaveReader Huffman Differencial Transform Decompression Utils FUF
+algorithms = \
+        WaveReader \
+        WaveWriter \
+        FUF \
+        Huffman \
+        Differencial \
+        Transform \
+        Utils
+
 LIB_CODEC = Codec
 
 LIB = -l$(LIB_CODEC)
