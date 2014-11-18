@@ -6,17 +6,27 @@
 #include <stdio.h>
 #include "WaveReader.h"
 
+enum compressMode {
+	NONE = 0,
+	HUFFMAN = 1,
+	DIFFERENCE = 2,
+	TRANSFORM = 3
+};
+
 class FUF {
 private:
 	WaveReader sample;
 	
-	enum {
-		NONE = 0,
-		HUFFMAN = 1,
-		DIFFERENCE = 2,
-		TRANSFORM = 3
-	} compression[COMPRESSION_MODE_COUNT];
+	compressMode compression[COMPRESSION_MODE_COUNT];
 	int lastCompression;
+
+	void huffmanCompress();
+	void differencialCompress();
+	void transformCompress();
+
+	void huffmanDecompress();
+	void differencialDecompress();
+	void transformDecompress();
 
 public:
 
@@ -26,10 +36,7 @@ public:
 	void compress(compressMode);
 	void compress(compressMode, compressMode);
 	void compress(compressMode, compressMode, compressMode);
-	void huffmanCompress();
-	void differencialCompress();
-	void transformCompress();
-	void decompression();
+	void decompress();
 
 };
 

@@ -1,5 +1,6 @@
 #include "FUF.h"
 
+#include <math.h>
 #include <stdio.h>
 #include "Utils.h"
 

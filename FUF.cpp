@@ -45,3 +45,20 @@ FUF::compress(compressMode a, compressMode b, compressMode c){
 	compress(b);
 	compress(c);
 }
+
+FUF::decompress(){
+	while (lastCompression > 0) {
+		switch (lastCompression - 1){
+			case HUFFMAN:
+				huffmanDecompress();
+				break;
+			case DIFFERENCE:
+				differencialDecompress()
+					break;
+			case TRANSFORM:
+				transformDecompress();
+				break;
+		}
+		lastCompression--;
+	}
+}

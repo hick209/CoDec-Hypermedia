@@ -52,19 +52,19 @@ int main(int argc, char** argv) {
 
     if (option == "--huff") {
         cout << "Applying Huffman to file " << filename << endl;
-        sample.huffmanCompress();
+        sample.compress(HUFFMAN);
     }
     else if (option == "--diff") {
         cout << "Applying Differencial to file " << filename << endl;
-		sample.differencialCompress();
+		sample.compress(DIFFERENCE);
     }
     else if (option == "--trans") {
         cout << "Applying Transform to file " << filename << endl;
-        sample.transformCompress();
+        sample.compress(TRANSFORM);
     }
     else if (option == "--dec") {
         cout << "Decompressing file " << filename << endl;
-        sample.decompression();
+        sample.decompress();
     }
 
     return EXIT_SUCCESS;
