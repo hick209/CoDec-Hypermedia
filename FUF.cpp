@@ -18,6 +18,19 @@ FUF::compress(compressMode a){
 			return;
 		}
 	}
+
+	switch (a){
+		case HUFFMAN:
+			huffmanCompress();
+			break;
+		case DIFFERENCE:
+			differencialCompress()
+			break;
+		case TRANSFORM:
+			transformCompress();
+			break;
+	}
+
 	compress[lastCompression] = a;
 	lastCompression++;
 }
