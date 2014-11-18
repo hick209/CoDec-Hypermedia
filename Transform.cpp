@@ -14,9 +14,11 @@ void FUF::transformCompress() {
     int cn = data->channelCount;
     int dn = data->dataLength;
 
-    double z[cn][dn];
+    double** z;
+    z = new double*[cn];
 
     for (int c = 0; c < cn; c++) {
+        z[c] = new double[dn];
         discreteCosineTransform(data->data[c], dn, z[c]);
     }
 }
@@ -25,7 +27,11 @@ void FUF::transformDecompress() {}
 
 
 void discreteCosineTransform(const int* x, int size, double* z) {
-    double xk[size][size];
+    double** xk = new double*[size];
+
+    for (int n = 0; n < size; n++) {
+        xk[n] = new double[size];
+    }
 
     for (int n = 0; n < size; n++) {
         xk[0][n] = 1/sqrt(size) * x[n];
@@ -50,7 +56,11 @@ void discreteCosineTransform(const int* x, int size, double* z) {
 
 
 void inverseDiscreteCosineTransform(const double* z, int size, double* x) {
-    double xk[size][size];
+    double** xk = new double*[size];
+
+    for (int n = 0; n < size; n++) {
+        xk[n] = new double[size];
+    }
 
     for (int n = 0; n < size; n++) {
         xk[0][n] = sqrt(1.0/size) * z[0];
