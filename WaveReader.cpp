@@ -48,7 +48,7 @@ int WaveReader::readInt16() {
 int WaveReader::readInt8() {
 	int data = 0;
 	char buffer[1];
-	fread(buffer, 2, 1, mWavFile);
+	fread(buffer, 1, 1, mWavFile);
 
 	data = 0x00ff & buffer[0];
 
