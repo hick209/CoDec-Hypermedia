@@ -2,13 +2,13 @@
 #define WAVE_WRITER_H
 
 #include <stdio.h>
-#include "WaveReader.h"
+#include "Wave.h"
 
 
 class WaveWriter {
 private:
-	const WaveInfo info;
-	const WaveData data;
+	const WaveInfo mInfo;
+	const WaveData mData;
 
   FILE* mFile;
 
@@ -16,14 +16,14 @@ private:
 	void writeInt16(int data);
 	void writeInt8(int data);
 
-	void write(int bytes, int* data);
+	void write(int bytes, int data);
 
 	void writeHeader();
 	void writeData();
 
 public:
 	WaveWriter(WaveInfo, WaveData);
-	~WaveWriter();
+	~WaveWriter() {}
 
 	void writeWav(const char* filename);
 };

@@ -2,32 +2,7 @@
 #define WAVE_READER_H
 
 #include <stdio.h>
-
-
-struct WaveInfo {
-	/* Format */
-	int formatSize;
-	int format;
-	int channels;
-	int channelCount;
-	int sampleRate;
-	int bitsPerSecond;
-	int formatBlockAlign;
-	int bitDepth;
-	/* Riff */
-	int headerId;
-	int memSize;
-	int riffStyle;
-	/* Data */
-	int dataSize;
-};
-
-
-struct WaveData {
-	int   channelCount;
-	int** data;
-	int   dataLength;
-};
+#include "Wave.h"
 
 
 class WaveReader {

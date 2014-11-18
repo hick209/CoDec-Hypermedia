@@ -8,10 +8,10 @@
 #include "WaveReader.h"
 
 enum compressMode {
-	NONE = 0,
-	HUFFMAN = 1,
+	NONE       = 0,
+	HUFFMAN    = 1,
 	DIFFERENCE = 2,
-	TRANSFORM = 3
+	TRANSFORM  = 3
 };
 
 class FUF {
