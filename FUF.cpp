@@ -1,64 +1,70 @@
 #include "FUF.h"
-#include <algorithm>
+
+using namespace std;
 
 FUF::FUF(const char* filename, const char* filenameExtensionLess)
-		: sample(filename), lastCompression(0){
-	for (int i = 0, i < COMPRESSION_MODE_COUNT; i++){
-		compress[i] = NONE;
+		: sample(filename), lastCompression(0) {
+	for (int i = 0; i < COMPRESSION_MODE_COUNT; i++) {
+		compression[i] = NONE;
 	}
 	sample.readWav();
 }
 
-FUF::~FUF(){}
+FUF::~FUF() {}
 
-FUF::compress(compressMode a){
-	for (int i = 0, i < lastCompression; i++){
-		if (compress[i] == a) {
-			cout << "This compression was already applied. YOCO, bro!";
+void FUF::compress(compressMode a) {
+	for (int i = 0; i < lastCompression; i++) {
+		if (compression[i] == a) {
+			cout << "This compression was already applied. YOCO, bro!" << endl;
 			return;
 		}
 	}
 
-	switch (a){
+	switch (a) {
 		case HUFFMAN:
 			huffmanCompress();
 			break;
 		case DIFFERENCE:
-			differencialCompress()
+			differencialCompress();
 			break;
 		case TRANSFORM:
 			transformCompress();
 			break;
+		case NONE:
+			break;
 	}
 
-	compress[lastCompression] = a;
+	compression[lastCompression] = a;
 	lastCompression++;
 }
 
-FUF::compress(compressMode a, compressMode b){
+void FUF::compress(compressMode a, compressMode b){
 	compress(a);
 	compress(b);
 }
 
-FUF::compress(compressMode a, compressMode b, compressMode c){
+void FUF::compress(compressMode a, compressMode b, compressMode c){
 	compress(a);
 	compress(b);
 	compress(c);
 }
 
-FUF::decompress(){
+void FUF::decompress(){
 	while (lastCompression > 0) {
-		switch (lastCompression - 1){
+		lastCompression--;
+		switch (compression[lastCompression]){
 			case HUFFMAN:
 				huffmanDecompress();
 				break;
 			case DIFFERENCE:
-				differencialDecompress()
+				differencialDecompress();
 					break;
 			case TRANSFORM:
 				transformDecompress();
 				break;
+			case NONE:
+				break;
 		}
-		lastCompression--;
 	}
 }
+

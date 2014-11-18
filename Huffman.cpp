@@ -8,3 +8,4 @@ void FUF::huffmanCompress() {
 	printWavInfo(sample.info);
 }
 
+void FUF::huffmanDecompress() {}

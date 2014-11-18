@@ -5,3 +5,4 @@
 
 void FUF::differencialCompress() {}
 
+void FUF::differencialDecompress() {}

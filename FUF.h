@@ -4,6 +4,7 @@
 #define COMPRESSION_MODE_COUNT 3
 
 #include <stdio.h>
+#include <iostream>
 #include "WaveReader.h"
 
 enum compressMode {
@@ -37,7 +38,6 @@ public:
 	void compress(compressMode, compressMode);
 	void compress(compressMode, compressMode, compressMode);
 	void decompress();
-
 };
 
 

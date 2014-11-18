@@ -21,6 +21,8 @@ void FUF::transformCompress() {
     }
 }
 
+void FUF::transformDecompress() {}
+
 
 void discreteCosineTransform(const int* x, int size, double* z) {
     double xk[size][size];

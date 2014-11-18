@@ -1,6 +1,6 @@
 CC = g++
 C_FLAGS =
-CPP_FLAGS = -I. -Wall --pedantic-errors 
+CPP_FLAGS = -I. -Wall --pedantic-errors
 LD_FLAGS = -L.
 MAKE = make
 AR = ar
