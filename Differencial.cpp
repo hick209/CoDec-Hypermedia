@@ -9,38 +9,39 @@ int** diffVectorGenerate(int** data, int cn, int dn);
 
 void FUF::differencialCompress() {
 
-	WaveData* data = &(sample.data);
-	int cn = data->channelCount;
-	int dn = data->dataLength;
+	WaveData* wdata = &(sample.data);
+	int cn = wdata->channelCount;
+	int dn = wdata->dataLength;
+	int** data = wdata->data;
 
-	for (int c = 0; c < cn; c++) {
-		for (int d = 0; d < dn; d++){
-			cout << data->data[c][d] << " ";
-		}
-		cout << "\n\n";
-	}
-
-	int** diff = diffVectorGenerate(data->data, cn, dn);
-
-	for (int c = 0; c < cn; c++) {
-		for (int d = 0; d < dn; d++){
-			cout << diff[c][d] << " ";
-		}
-		cout << "\n\n";
-	}
-}
-
-void FUF::differencialDecompress() {}
-
-int** diffVectorGenerate(int** data, int cn, int dn){
 	int** diff = new int*[cn];
 
 	for (int c = 0; c < cn; c++) {
 		diff[c] = new int[dn];
-		for (int d = 0; d < dn; d++){
-			data[c][d] = 0;
+		diff[c][0] = data[c][0];
+		for (int d = 1; d < dn; d++){
+			diff[c][d] = data[c][d] - data[c][d - 1];
 		}
 	}
 
-	return diff;
+	data = diff;
+}
+
+void FUF::differencialDecompress() {
+	WaveData* wdata = &(sample.data);
+	int cn = wdata->channelCount;
+	int dn = wdata->dataLength;
+	int** diff = wdata->data;
+
+	int** recv = new int*[cn];
+
+	for (int c = 0; c < cn; c++) {
+		recv[c] = new int[dn];
+		recv[c][0] = diff[c][0];
+		for (int d = 1; d < dn; d++){
+			recv[c][d] = diff[c][d] + diff[c][d - 1];
+		}
+	}
+
+	diff = recv;
 }
