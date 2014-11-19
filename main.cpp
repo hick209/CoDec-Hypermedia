@@ -15,9 +15,11 @@ Compress or decompress a file to .fuf according to the specified algorithm.\n\
 OPTION specify decompression or the type of compression algorithm.\n\
 \n\
 Compress options:\n\
-  --huff    Huffman compression\n\
-  --diff    Differencial compression\n\
-  --trans   Transform compression\n\
+  -h    Huffman compression\n\
+  -d    Differencial, Huffman compression\n\
+  -t    Transform, Huffman compression\n\
+  -dt   Differencial, Transform, Huffman compression\n\
+  -td   Transform, Differencial, Huffman compression\n\
 \n\
 Decompress option:\n\
   --dec     Decompress a .fuf file\n\
@@ -50,21 +52,39 @@ int main(int argc, char** argv) {
 	// Object Instance
 	FUF sample(filename.c_str(), noExtentionFilename.c_str());
 
-    if (option == "--huff") {
-        cout << "Applying Huffman to file " << filename << endl;
-        sample.compress(HUFFMAN);
-    }
-    else if (option == "--diff") {
-        cout << "Applying Differencial to file " << filename << endl;
-		sample.compress(DIFFERENCE);
-    }
-    else if (option == "--trans") {
-        cout << "Applying Transform to file " << filename << endl;
-        sample.compress(TRANSFORM);
-    }
-    else if (option == "--dec") {
+    if (option == "--dec") {
         cout << "Decompressing file " << filename << endl;
         sample.decompress();
+    }
+    else {
+        if (option[1] == 'h') {
+            cout << "Applying Huffman to file " << filename << endl;
+            sample.compress(HUFFMAN);
+        }
+        else {
+            switch(option.size()) {
+            case 2:
+                if (option[1] == 'd') {
+                    cout << "Applying Differencial, Huffman to file " << filename << endl;
+                    sample.compress(DIFFERENCE, HUFFMAN);
+                }
+                else if (option[1] == 't') {
+                    cout << "Applying Transform, Huffman to file " << filename << endl;
+                    sample.compress(TRANSFORM, HUFFMAN);
+                }
+                break;
+
+            case 3:
+                if (option[1] == 'd' && option[2] == 't') {
+                    cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
+                    sample.compress(DIFFERENCE, TRANSFORM, HUFFMAN);
+                }
+                else if (option[1] == 't' && option[2] == 'd') {
+                    cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
+                    sample.compress(TRANSFORM, DIFFERENCE, HUFFMAN);
+                }
+            }
+        }
     }
 
     return EXIT_SUCCESS;
@@ -94,7 +114,7 @@ bool processInput(int argc, char** argv, string& option, string &filename) {
     }
 
     bool isHelp = (option == "-h" || option == "--help");
-    bool badOption = (argc > 2 && option != "--huff" && option != "--trans" && option != "--diff" && option != "--dec");
+    bool badOption = (argc > 2 && option != "-h" && option != "-t" && option != "-d" && option != "-td" && option != "-dt" && option != "--dec");
     bool invalidFileName = (argc > 2 && access(filename.c_str(), F_OK) == -1);
 
     if (isHelp) {

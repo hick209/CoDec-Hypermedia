@@ -5,8 +5,8 @@
 #include "Utils.h"
 
 
-void discreteCosineTransform(const int* x, int size, double* z);
-void inverseDiscreteCosineTransform(const double* z, int size, double* x);
+void discreteCosineTransform(const int* x, int size, int* z);
+void inverseDiscreteCosineTransform(const int* z, int size, int* x);
 
 
 void FUF::transformCompress() {
@@ -14,19 +14,23 @@ void FUF::transformCompress() {
     int cn = data->channelCount;
     int dn = data->dataLength;
 
-    double** z;
-    z = new double*[cn];
-
     for (int c = 0; c < cn; c++) {
-        z[c] = new double[dn];
-        discreteCosineTransform(data->data[c], dn, z[c]);
+        discreteCosineTransform(data->data[c], dn, data->data[c]);
     }
 }
 
-void FUF::transformDecompress() {}
+void FUF::transformDecompress() {
+    WaveData* data = &(sample.data);
+    int cn = data->channelCount;
+    int dn = data->dataLength;
+
+    for (int c = 0; c < cn; c++) {
+        inverseDiscreteCosineTransform(data->data[c], dn, data->data[c]);
+    }
+}
 
 
-void discreteCosineTransform(const int* x, int size, double* z) {
+void discreteCosineTransform(const int* x, int size, int* z) {
     double** xk = new double*[size];
 
     for (int n = 0; n < size; n++) {
@@ -43,19 +47,28 @@ void discreteCosineTransform(const int* x, int size, double* z) {
         }
     }
 
+    double* temp = new double[size];
     for (int k = 0; k < size; k++) {
-        z[k] = 0;
+        temp[k] = 0;
     }
 
     for (int k = 0; k < size; k++) {
         for (int n = 0; n < size; n++) {
-            z[k] += xk[k][n];
+            temp[k] += xk[k][n];
         }
     }
+
+    for (int k = 0; k < size; k++) {
+        z[k] = (int) temp[k];
+        delete[] xk[k];
+    }
+
+    delete[] temp;
+    delete[] xk;
 }
 
 
-void inverseDiscreteCosineTransform(const double* z, int size, double* x) {
+void inverseDiscreteCosineTransform(const int* z, int size, int* x) {
     double** xk = new double*[size];
 
     for (int n = 0; n < size; n++) {
@@ -72,14 +85,23 @@ void inverseDiscreteCosineTransform(const double* z, int size, double* x) {
         }
     }
 
+    double* temp = new double[size];
     for (int k = 0; k < size; k++) {
-        x[k] = 0;
+        temp[k] = 0;
     }
 
     for (int k = 0; k < size; k++) {
         for (int n = 0; n < size; n++) {
-            x[k] += xk[n][k];
+            temp[k] += xk[n][k];
         }
     }
+
+    for (int k = 0; k < size; k++) {
+        x[k] = (int) temp[k];
+        delete[] xk[k];
+    }
+
+    delete[] temp;
+    delete[] xk;
 }
 
