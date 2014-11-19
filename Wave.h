@@ -6,7 +6,6 @@ struct WaveInfo {
 	int formatSize;
 	int format;
 	int channels;
-	int channelCount;
 	int sampleRate;
 	int bitsPerSecond;
 	int formatBlockAlign;
