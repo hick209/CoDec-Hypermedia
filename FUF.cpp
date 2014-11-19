@@ -2,8 +2,8 @@
 
 using namespace std;
 
-FUF::FUF(const char* filename, const char* filenameExtensionLess)
-		: sample(filename), lastCompression(0) {
+FUF::FUF(const char* filename)
+		: sample(filename), lastCompression(0){
 	for (int i = 0; i < COMPRESSION_MODE_COUNT; i++) {
 		compression[i] = NONE;
 	}
@@ -11,6 +11,11 @@ FUF::FUF(const char* filename, const char* filenameExtensionLess)
 }
 
 FUF::~FUF() {}
+
+void FUF::writeToFile(const char* filename){
+	WaveWriter output(sample.info, sample.data);
+	output.writeWav(filename);
+}
 
 void FUF::compress(compressMode a) {
 	for (int i = 0; i < lastCompression; i++) {

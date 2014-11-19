@@ -49,8 +49,9 @@ int main(int argc, char** argv) {
     string noExtentionFilename = filename.substr(0, filename.find_last_of("."));
     cout << noExtentionFilename << endl;
 
+
 	// Object Instance
-	FUF sample(filename.c_str(), noExtentionFilename.c_str());
+	FUF sample(filename.c_str());
 
     if (option == "--dec") {
         cout << "Decompressing file " << filename << endl;
@@ -86,6 +87,8 @@ int main(int argc, char** argv) {
             }
         }
     }
+
+	sample.writeToFile((noExtentionFilename + ".fuf").c_str());
 
     return EXIT_SUCCESS;
 }

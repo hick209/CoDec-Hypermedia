@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "WaveReader.h"
+#include "WaveWriter.h"
 
 enum compressMode {
 	NONE       = 0,
@@ -31,13 +32,14 @@ private:
 
 public:
 
-	FUF(const char* filename, const char* filenameExtensionLess);
+	FUF(const char* filename);
 	~FUF();
 
 	void compress(compressMode);
 	void compress(compressMode, compressMode);
 	void compress(compressMode, compressMode, compressMode);
 	void decompress();
+	void writeToFile(const char* filename);
 };
 
 
