@@ -1,27 +1,45 @@
 #ifndef FUF_H
 #define FUF_H
 
-#include <stdio.h>
-#include "WaveReader.h"
+#define COMPRESSION_MODE_COUNT 3
 
+#include <stdio.h>
+#include <iostream>
+#include "WaveReader.h"
+#include "WaveWriter.h"
+
+enum compressMode {
+	NONE       = 0,
+	HUFFMAN    = 1,
+	DIFFERENCE = 2,
+	TRANSFORM  = 3
+};
 
 class FUF {
 private:
 	WaveReader sample;
-	int huffmanized;
-	int differentiated;
-	int transformed;
-
-public:
-
-	FUF(const char* filename, const char* filenameExtensionLess);
-	~FUF();
+	
+	compressMode compression[COMPRESSION_MODE_COUNT];
+	int lastCompression;
 
 	void huffmanCompress();
 	void differencialCompress();
 	void transformCompress();
-	void decompression();
 
+	void huffmanDecompress();
+	void differencialDecompress();
+	void transformDecompress();
+
+public:
+
+	FUF(const char* filename);
+	~FUF();
+
+	void compress(compressMode);
+	void compress(compressMode, compressMode);
+	void compress(compressMode, compressMode, compressMode);
+	void decompress();
+	void writeToFile(const char* filename);
 };
 
 

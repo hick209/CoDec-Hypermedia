@@ -4,5 +4,4 @@
 #include "Utils.h"
 
 
-void FUF::decompression(){ }
 
