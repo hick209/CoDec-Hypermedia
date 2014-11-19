@@ -51,13 +51,14 @@ int main(int argc, char** argv) {
 
 
 	// Object Instance
-	FUF sample(filename.c_str());
-
-    if (option == "--dec") {
+	if (option == "--dec") {
+		FUF sample(filename.c_str(), true);
         cout << "Decompressing file " << filename << endl;
         sample.decompress();
+		sample.writeToFile((noExtentionFilename + ".wav").c_str());
     }
     else {
+		FUF sample(filename.c_str());
         if (option[1] == 'h') {
             cout << "Applying Huffman to file " << filename << endl;
             sample.compress(HUFFMAN);
@@ -86,9 +87,9 @@ int main(int argc, char** argv) {
                 }
             }
         }
-    }
 
-	sample.writeToFile((noExtentionFilename + ".fuf").c_str());
+		sample.writeFufFile((noExtentionFilename + ".fuf").c_str());
+    }
 
     return EXIT_SUCCESS;
 }

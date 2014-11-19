@@ -33,6 +33,7 @@ private:
 public:
 
 	FUF(const char* filename);
+	FUF(const char* filename, bool readFromFuf);
 	~FUF();
 
 	void compress(compressMode);
@@ -40,6 +41,7 @@ public:
 	void compress(compressMode, compressMode, compressMode);
 	void decompress();
 	void writeToFile(const char* filename);
+	void writeFufFile(const char* filename);
 };
 
 
