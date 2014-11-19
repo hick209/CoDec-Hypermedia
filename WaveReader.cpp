@@ -83,7 +83,6 @@ WaveInfo WaveReader::readHeader() {
 		        info.formatSize = readInt32();
 		        info.format = readInt16();
 		        info.channels = readInt16();
-		        info.channelCount = (int) info.channels;
 		        info.sampleRate = readInt32();
 		        info.bitsPerSecond = readInt32();
 		        info.formatBlockAlign = readInt16();
@@ -122,7 +121,7 @@ WaveInfo WaveReader::readHeader() {
 
 WaveData WaveReader::readData() {
 	WaveData data;
-	data.channelCount = info.channelCount;
+	data.channelCount = info.channels;
 
 	data.dataLength = info.dataSize / data.channelCount;
 	data.data = new int*[data.channelCount];
@@ -136,13 +135,13 @@ WaveData WaveReader::readData() {
 		case PULSE_CODE_MODULATION:
 		case EXTENSIBLE:
 		default:
-			bytesPerSample = (info.bitDepth / info.channelCount) / 8;
+			bytesPerSample = (info.bitDepth / data.channelCount) / 8;
 			break;
 	}
 
 	int byteCount = info.dataSize / data.channelCount;
 	for (int i = 0; i < byteCount; i++) {
-		for (int j = 0; j < info.channelCount; j++) {
+		for (int j = 0; j < data.channelCount; j++) {
 			data.data[j][i] = readSample(bytesPerSample);
 		}
 	}
