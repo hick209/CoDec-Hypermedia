@@ -116,7 +116,7 @@ bool processInput(int argc, char** argv, string& option, string &filename) {
         return false;
     }
 
-    bool isHelp = (option == "-h" || option == "--help");
+    bool isHelp = (option == "--help");
     bool badOption = (argc > 2 && option != "-h" && option != "-t" && option != "-d" && option != "-td" && option != "-dt" && option != "--dec");
     bool invalidFileName = (argc > 2 && access(filename.c_str(), F_OK) == -1);
 
