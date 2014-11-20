@@ -10,12 +10,6 @@ FUF::FUF(const char* filename)
 	sample.readWav();
 }
 
-FUF(const char* filename, bool readFromFuf){
-}
-
-void writeFufFile(const char* filename){
-}
-
 FUF::~FUF() {}
 
 void FUF::writeToFile(const char* filename){
@@ -78,4 +72,3 @@ void FUF::decompress(){
 		}
 	}
 }
-
