@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include "WaveReader.h"
 #include "WaveWriter.h"
 
@@ -40,7 +41,18 @@ public:
 	void compress(compressMode, compressMode, compressMode);
 	void decompress();
 	void writeToFile(const char* filename);
+
+	friend std::istream& operator>> (std::istream& stream, const FUF& object);
+	friend std::ostream& operator<< (std::ostream& stream, const FUF& object);
 };
+
+std::istream& operator>> (std::istream& stream, const FUF& object){
+	return stream;
+}
+
+std::ostream& operator<< (std::ostream& stream, const FUF& object){
+	return stream;
+}
 
 
 #endif // FUF_H
