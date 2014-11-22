@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 
 	if (option == "--dec") {
 		ifstream ifs("teste.fuf", ifstream::binary);
-		ifs >> sample;
+		//ifs >> sample;
 		ifs.close();
         
 		cout << "Decompressing file " << filename << endl;
@@ -63,39 +63,38 @@ int main(int argc, char** argv) {
 		sample.writeToFile((noExtentionFilename + ".wav").c_str());
     }
     else {
-		
-        /*if (option[1] == 'h') {
+        if (option[1] == 'h') {
             cout << "Applying Huffman to file " << filename << endl;
             sample.compress(HUFFMAN);
         }
         else {
             switch(option.size()) {
-            case 2:
-                if (option[1] == 'd') {
-                    cout << "Applying Differencial, Huffman to file " << filename << endl;
-                    sample.compress(DIFFERENCE, HUFFMAN);
-                }
-                else if (option[1] == 't') {
-                    cout << "Applying Transform, Huffman to file " << filename << endl;
-                    sample.compress(TRANSFORM, HUFFMAN);
-                }
-                break;
+                case 2:
+                    if (option[1] == 'd') {
+                        cout << "Applying Differencial, Huffman to file " << filename << endl;
+                        sample.compress(DIFFERENCE, HUFFMAN);
+                    }
+                    else if (option[1] == 't') {
+                        cout << "Applying Transform, Huffman to file " << filename << endl;
+                        sample.compress(TRANSFORM, HUFFMAN);
+                    }
+                    break;
 
-            case 3:
-                if (option[1] == 'd' && option[2] == 't') {
-                    cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
-                    sample.compress(DIFFERENCE, TRANSFORM, HUFFMAN);
-                }
-                else if (option[1] == 't' && option[2] == 'd') {
-                    cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
-                    sample.compress(TRANSFORM, DIFFERENCE, HUFFMAN);
-                }
+                case 3:
+                    if (option[1] == 'd' && option[2] == 't') {
+                        cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
+                        sample.compress(DIFFERENCE, TRANSFORM, HUFFMAN);
+                    }
+                    else if (option[1] == 't' && option[2] == 'd') {
+                        cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
+                        sample.compress(TRANSFORM, DIFFERENCE, HUFFMAN);
+                    }
             }
-        }*/
+        }
 
-		ofstream ofs("teste.fuf", ofstream::binary);
-		ofs << sample;
-		ofs.close();
+//		ofstream ofs("teste.fuf", ofstream::binary);
+//		ofs << sample;
+//		ofs.close();
     }
 
     return EXIT_SUCCESS;

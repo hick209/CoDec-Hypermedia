@@ -3,7 +3,7 @@
 using namespace std;
 
 FUF::FUF(const char* filename)
-		: sample(filename), lastCompression(0){
+		: sample(filename), lastCompression(0) {
 	for (int i = 0; i < COMPRESSION_MODE_COUNT; i++) {
 		compression[i] = NONE;
 	}
@@ -72,3 +72,4 @@ void FUF::decompress(){
 		}
 	}
 }
+

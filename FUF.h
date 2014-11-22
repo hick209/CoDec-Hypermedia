@@ -42,17 +42,17 @@ public:
 	void decompress();
 	void writeToFile(const char* filename);
 
-	friend std::istream& operator>> (std::istream& stream, const FUF& object);
-	friend std::ostream& operator<< (std::ostream& stream, const FUF& object);
+//	friend std::istream& operator>> (std::istream& stream, const FUF& object);
+//	friend std::ostream& operator<< (std::ostream& stream, const FUF& object);
 };
 
-std::istream& operator>> (std::istream& stream, const FUF& object){
-	return stream;
-}
+//std::istream& operator >> (std::istream& stream, const FUF& object){
+//	return stream;
+//}
 
-std::ostream& operator<< (std::ostream& stream, const FUF& object){
-	return stream;
-}
+//std::ostream& operator << (std::ostream& stream, const FUF& object){
+//	return stream;
+//}
 
 
 #endif // FUF_H
