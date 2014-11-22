@@ -12,9 +12,14 @@ FUF::FUF(const char* filename)
 
 FUF::~FUF() {}
 
-void FUF::writeToFile(const char* filename){
+void FUF::writeToFile(const char* filename, fileExtension ext){
 	WaveWriter output(sample.info, sample.data);
-	output.writeWav(filename);
+	
+	char* fname = (char*) malloc(strlen(filename) + 1);
+	strcpy(fname, filename);
+	
+	if (ext == eWAV) output.writeWav(strcat(fname, ".wav"));
+	else if (ext == eFUF) output.writeWav(strcat(fname, ".fuf"));
 }
 
 void FUF::compress(compressMode a) {

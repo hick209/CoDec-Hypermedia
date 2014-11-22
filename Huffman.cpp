@@ -114,7 +114,7 @@ void reduce(vector<TreeNode>& t) {
 }
 
 void printFrequency(vector<Data> f) {
-    for (int i = 0; i < f.size(); i++) {
+    for (unsigned int i = 0; i < f.size(); i++) {
         cout << "Element: " << f[i].first[0] << " -> " << f[i].second << endl;
     }
 }
@@ -138,7 +138,7 @@ void FUF::huffmanCompress() {
 
     // Create the tree
     vector<TreeNode> tree;
-    for (int i = 0; i < frequencies.size(); i++) {
+    for (unsigned int i = 0; i < frequencies.size(); i++) {
         tree.push_back(TreeNode(frequencies[i]));
     }
 

@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
-#include <string>
 
 #include "FUF.h"
 
@@ -54,13 +53,9 @@ int main(int argc, char** argv) {
 	FUF sample(filename.c_str());
 
 	if (option == "--dec") {
-		ifstream ifs("teste.fuf", ifstream::binary);
-		//ifs >> sample;
-		ifs.close();
-        
 		cout << "Decompressing file " << filename << endl;
-        //sample.decompress();
-		sample.writeToFile((noExtentionFilename + ".wav").c_str());
+        sample.decompress();
+		sample.writeToFile(noExtentionFilename.c_str(), eWAV);
     }
     else {
         if (option[1] == 'h') {
@@ -91,11 +86,8 @@ int main(int argc, char** argv) {
                     }
             }
         }
-
-//		ofstream ofs("teste.fuf", ofstream::binary);
-//		ofs << sample;
-//		ofs.close();
-    }
+		sample.writeToFile(noExtentionFilename.c_str(), eFUF);
+	}
 
     return EXIT_SUCCESS;
 }
