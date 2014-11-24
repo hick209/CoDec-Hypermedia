@@ -13,6 +13,10 @@ using namespace std;
 typedef vector<int>        Element;
 typedef pair<Element, int> Data;
 
+struct Code {
+		vector<int> code;
+		Element e;
+};
 
 struct HuffmanRoll {
 #define MASK_KEY  0x0f
@@ -61,6 +65,8 @@ struct sortPair {
     }
 };
 
+void generateCodeTable(TreeNode* t, vector<Code>& codeTable, vector<int>& code);
+
 vector<Data> countFrequency(WaveData d) {
     map<int, int> myMap;
     vector<Data>  frequencies;
@@ -106,7 +112,7 @@ void reduce(vector<TreeNode>& t) {
     newNode.right = &t[1];
 
     // Remove and add nodes from the list
-    t.erase(t.begin(), t.begin()+1);
+    t.erase(t.begin(), t.begin()+2);
     t.push_back(newNode);
 
     sortTreeNodes(t);
@@ -126,21 +132,73 @@ void printTree(TreeNode* t, int depth) {
     printTree(t->right, depth+1);
 }
 
+void getLeft(TreeNode* t, vector<Code>& codeTable, vector<int>& code){
+		Code aux;
+		
+		if(t->left == NULL){
+			aux.code.assign(code.begin(), code.end());
+			aux.e.assign(t->d.first.begin(), t->d.first.end());
+			code.clear();
+			codeTable.push_back(aux);
+		}
+		else{
+			code.push_back(0);
+			generateCodeTable(t->left, codeTable, code);
+		}
+}
+
+void getRight(TreeNode* t, vector<Code>& codeTable, vector<int>& code){
+		Code aux;
+		
+		if(t->right == NULL){
+			aux.code.assign(code.begin(), code.end());
+			aux.e.assign(t->d.first.begin(), t->d.first.end());
+			code.clear();
+			codeTable.push_back(aux);
+		}
+		else{
+			code.push_back(1);
+			generateCodeTable(t->right, codeTable, code);
+		}
+}
+
+void generateCodeTable(TreeNode* t, vector<Code>& codeTable, vector<int>& code){
+		getLeft(t, codeTable, code);
+		getRight(t, codeTable, code);
+}
+/*
+void printCode(Code code){
+		printf("\n Elemento:");
+		for(int i=0; i<code.e.size(); i++){
+			printf("%d", code.e[i]);
+		}
+		
+		printf("\tCodigo:");
+		for(int i=0; i<code.code.size(); i++){
+			printf("%d", code.code[i]);
+		}
+}*/
 
 void FUF::huffmanCompress() {
 	// Node vector with frequencias
 	// Count the frequencies
-	vector<Data> frequencies = countFrequency(sample.data);
+		vector<Data> frequencies = countFrequency(sample.data);
 
     // Mapped!
-//    printFrequency(frequencies);
+    printFrequency(frequencies);
 
     // Create the tree
     vector<TreeNode> tree;
+		
     for (unsigned int i = 0; i < frequencies.size(); i++) {
         tree.push_back(TreeNode(frequencies[i]));
     }
 
+		//Inserir a árvore dentro do arquivo
+		vector<Code> codeTable;
+		vector<int> code;
+		
+		generateCodeTable(&tree[0], codeTable, code);
     // Ordenados!
 //    sortTreeNodes(tree);
 
