@@ -1,6 +1,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
+#include <set>
+#include <map>
 
 #include "FUF.h"
 
@@ -15,14 +17,18 @@ OPTION specify decompression or the type of compression algorithm.\n\
 \n\
 Compress options:\n\
   -h    Huffman compression\n\
-  -d    Differencial, Huffman compression\n\
-  -t    Transform, Huffman compression\n\
-  -dt   Differencial, Transform, Huffman compression\n\
-  -td   Transform, Differencial, Huffman compression\n\
+  -dh   Differencial, Huffman compression\n\
+  -dt   Differencial, Transform compression\n\
+  -dth  Differencial, Transform, Huffman compression\n\
+  -t    Transform compression\n\
+  -td   Transform, Differencial compression\n\
+  -tdh  Transform, Differencial, Huffman compression\n\
 \n\
 Decompress option:\n\
   --dec     Decompress a .fuf file\n\
 \n\
+\n\
+The Transform compression used is the MDCT (Modified Discrete Cossine Transform) algorithm.\n\
 \n\
 Fun fact: .fuf stands for 'Formato Ultra Foda'.\n\n"
 
@@ -52,40 +58,37 @@ int main(int argc, char** argv) {
 	// Object Instance
 	FUF sample(filename.c_str());
 
+    if (option == "--deb") {
+        // Debug option!
+
+        // TODO colocar código de depuração aqui!
+
+        return EXIT_SUCCESS;
+    }
+
 	if (option == "--dec") {
 		cout << "Decompressing file " << filename << endl;
         sample.decompress();
 		sample.writeToFile(noExtentionFilename.c_str(), eWAV);
     }
     else {
-        if (option[1] == 'h') {
-            cout << "Applying Huffman to file " << filename << endl;
-            sample.compress(HUFFMAN);
-        }
-        else {
-            switch(option.size()) {
-                case 2:
-                    if (option[1] == 'd') {
-                        cout << "Applying Differencial, Huffman to file " << filename << endl;
-                        sample.compress(DIFFERENCE, HUFFMAN);
-                    }
-                    else if (option[1] == 't') {
-                        cout << "Applying Transform, Huffman to file " << filename << endl;
-                        sample.compress(TRANSFORM, HUFFMAN);
-                    }
-                    break;
+        compressMode algorithm[] = { NONE, NONE, NONE };
+        map<char, compressMode> compressMap;
+        compressMap['h'] = HUFFMAN;
+        compressMap['t'] = TRANSFORM;
+        compressMap['d'] = DIFFERENCE;
 
-                case 3:
-                    if (option[1] == 'd' && option[2] == 't') {
-                        cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
-                        sample.compress(DIFFERENCE, TRANSFORM, HUFFMAN);
-                    }
-                    else if (option[1] == 't' && option[2] == 'd') {
-                        cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
-                        sample.compress(TRANSFORM, DIFFERENCE, HUFFMAN);
-                    }
-            }
+        switch(option.size()) {
+            case 4:
+                algorithm[2] = compressMap[option[3]];
+            case 3:
+                algorithm[1] = compressMap[option[2]];
+            case 2:
+                algorithm[0] = compressMap[option[1]];
+                break;
         }
+
+        sample.compress(algorithm[0], algorithm[1], algorithm[2]);
 		sample.writeToFile(noExtentionFilename.c_str(), eFUF);
 	}
 
@@ -115,8 +118,21 @@ bool processInput(int argc, char** argv, string& option, string &filename) {
         return false;
     }
 
+    set<string> options;
+    options.insert("-h");
+    options.insert("-d");
+    options.insert("-dh");
+    options.insert("-dt");
+    options.insert("-dth");
+    options.insert("-t");
+    options.insert("-td");
+    options.insert("-tdh");
+    options.insert("--dec");
+
+    options.insert("--deb");
+
     bool isHelp = (option == "--help");
-    bool badOption = (argc > 2 && option != "-h" && option != "-t" && option != "-d" && option != "-td" && option != "-dt" && option != "--dec");
+    bool badOption = (argc > 2 && !options.count(option));
     bool invalidFileName = (argc > 2 && access(filename.c_str(), F_OK) == -1);
 
     if (isHelp) {
