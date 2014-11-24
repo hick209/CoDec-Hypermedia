@@ -5,9 +5,9 @@ WaveWriter::WaveWriter(WaveInfo info, WaveData data)
 }
 
 void WaveWriter::writeWav(const char* filename) {
-  mFile = fopen(filename, "wb");
+	mFile = fopen(filename, "wb");
 
-  printf("Writing header...\n");
+	printf("Writing header...\n");
 	writeHeader();
 	printf("Writing data...\n");
 	writeData();

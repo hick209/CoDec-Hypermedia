@@ -5,7 +5,11 @@
 
 using namespace std;
 
-int** diffVectorGenerate(int** data, int cn, int dn);
+void printData(int* channel, int l) {
+	for (int i = 0; i < l; i++){
+		cout << channel[i] << " ";
+	}
+}
 
 void FUF::differencialCompress() {
 
@@ -24,7 +28,7 @@ void FUF::differencialCompress() {
 		}
 	}
 
-	data = diff;
+	sample.data.data = diff;
 }
 
 void FUF::differencialDecompress() {

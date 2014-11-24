@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <iostream>
-#include <string>
 
 #include "FUF.h"
 
@@ -53,9 +52,10 @@ int main(int argc, char** argv) {
 	// Object Instance
 	FUF sample(filename.c_str());
 
-    if (option == "--dec") {
-        cout << "Decompressing file " << filename << endl;
+	if (option == "--dec") {
+		cout << "Decompressing file " << filename << endl;
         sample.decompress();
+		sample.writeToFile(noExtentionFilename.c_str(), eWAV);
     }
     else {
         if (option[1] == 'h') {
@@ -64,31 +64,30 @@ int main(int argc, char** argv) {
         }
         else {
             switch(option.size()) {
-            case 2:
-                if (option[1] == 'd') {
-                    cout << "Applying Differencial, Huffman to file " << filename << endl;
-                    sample.compress(DIFFERENCE, HUFFMAN);
-                }
-                else if (option[1] == 't') {
-                    cout << "Applying Transform, Huffman to file " << filename << endl;
-                    sample.compress(TRANSFORM, HUFFMAN);
-                }
-                break;
+                case 2:
+                    if (option[1] == 'd') {
+                        cout << "Applying Differencial, Huffman to file " << filename << endl;
+                        sample.compress(DIFFERENCE, HUFFMAN);
+                    }
+                    else if (option[1] == 't') {
+                        cout << "Applying Transform, Huffman to file " << filename << endl;
+                        sample.compress(TRANSFORM, HUFFMAN);
+                    }
+                    break;
 
-            case 3:
-                if (option[1] == 'd' && option[2] == 't') {
-                    cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
-                    sample.compress(DIFFERENCE, TRANSFORM, HUFFMAN);
-                }
-                else if (option[1] == 't' && option[2] == 'd') {
-                    cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
-                    sample.compress(TRANSFORM, DIFFERENCE, HUFFMAN);
-                }
+                case 3:
+                    if (option[1] == 'd' && option[2] == 't') {
+                        cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
+                        sample.compress(DIFFERENCE, TRANSFORM, HUFFMAN);
+                    }
+                    else if (option[1] == 't' && option[2] == 'd') {
+                        cout << "Applying Differencial, Transform, Huffman to file " << filename << endl;
+                        sample.compress(TRANSFORM, DIFFERENCE, HUFFMAN);
+                    }
             }
         }
-    }
-
-	sample.writeToFile((noExtentionFilename + ".fuf").c_str());
+		sample.writeToFile(noExtentionFilename.c_str(), eFUF);
+	}
 
     return EXIT_SUCCESS;
 }
@@ -116,7 +115,7 @@ bool processInput(int argc, char** argv, string& option, string &filename) {
         return false;
     }
 
-    bool isHelp = (option == "-h" || option == "--help");
+    bool isHelp = (option == "--help");
     bool badOption = (argc > 2 && option != "-h" && option != "-t" && option != "-d" && option != "-td" && option != "-dt" && option != "--dec");
     bool invalidFileName = (argc > 2 && access(filename.c_str(), F_OK) == -1);
 
