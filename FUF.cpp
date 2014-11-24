@@ -32,16 +32,20 @@ void FUF::compress(compressMode a) {
 
 	switch (a) {
 		case HUFFMAN:
+    		cout << "Applying Huffman..." << endl;
 			huffmanCompress();
 			break;
 		case DIFFERENCE:
+		    cout << "Applying Difference..." << endl;
 			differencialCompress();
 			break;
 		case TRANSFORM:
+		    cout << "Applying Transform..." << endl;
 			transformCompress();
 			break;
+
 		case NONE:
-			break;
+		    return;
 	}
 
 	compression[lastCompression] = a;
