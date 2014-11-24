@@ -1,60 +1,54 @@
 #include "FUF.h"
 
-#include <math.h>
-#include <stdio.h>
 #include "Utils.h"
+#include <math.h>
+#include <iostream>
 
+using namespace std;
 
-void modifiedDiscreteCosineTransform(const int* x, int size, int* z);
-void inverseModifiedDiscreteCosineTransform(const int* z, int size, int* x);
+void modifiedDiscreteCosineTransform(const int* x, int size, double* z);
+void inverseModifiedDiscreteCosineTransform(const double* z, int size, int* x);
 
 
 void FUF::transformCompress() {
-    WaveData* data = &(sample.data);
-    int cn = data->channelCount;
-    int dn = data->dataLength;
+    int cn = compressedData->getChannelCount();
+    int dn = compressedData->getDataLength();
 
-    int** zdata = new int*[cn];
+    compressedData->zData = new double*[cn];
     for (int c = 0; c < cn; c++) {
-        zdata[c] = new int[dn/2];
-        modifiedDiscreteCosineTransform(data->data[c], dn, zdata[c]);
+        compressedData->zData[c] = new double[dn/2];
+        modifiedDiscreteCosineTransform(compressedData->getData(c), dn, compressedData->zData[c]);
     }
+    compressedData->hasTransform = true;
 }
 
 void FUF::transformDecompress() {
-    WaveData* data = &(sample.data);
-    int cn = data->channelCount;
-    int dn = data->dataLength;
+    int cn = compressedData->getChannelCount();
+    int dn = compressedData->getDataLength();
 
-    int** zdata = new int*[cn];
     for (int c = 0; c < cn; c++) {
-        zdata[c] = new int[dn/2];
-        inverseModifiedDiscreteCosineTransform(zdata[c], dn, data->data[c]);
+        int* data = new int[dn * 2];
+        inverseModifiedDiscreteCosineTransform(compressedData->zData[c], dn, data);
+        compressedData->setData(c, data, dn*2);
     }
+    compressedData->hasTransform = false;
 }
 
 
-void modifiedDiscreteCosineTransform(const int* x, int size, int* z) {
-    double* s = new double[size/2];
+void modifiedDiscreteCosineTransform(const int* x, int size, double* z) {
     for (int i = 0; i < size; i++) {
-        s[i] = 0;
+        z[i] = 0;
     }
 
     for (int i = 0; i < size/2; i++) {
         for (int k = 0; k < size; k++) {
-            s[i] += x[k] * cos( M_PI / (2*size) * (2*k + 1 + size/2) * (2*i + 1) );
+            z[i] += x[k] * cos( M_PI / (2*size) * (2*k + 1 + size/2) * (2*i + 1) );
         }
     }
-
-    for (int i = 0; i < size; i++) {
-        z[i] = (int) s[i];
-    }
-
-    delete[] s;
 }
 
 
-void inverseModifiedDiscreteCosineTransform(const int* z, int size, int* x) {
+void inverseModifiedDiscreteCosineTransform(const double* z, int size, int* x) {
     double* xk = new double[size];
     for (int i = 0; i < size; i++) {
         xk[i] = 0;

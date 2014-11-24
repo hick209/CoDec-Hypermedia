@@ -1,33 +1,27 @@
 #ifndef FUF_H
 #define FUF_H
 
-#define COMPRESSION_MODE_COUNT 3
-
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
+#include "FormatoUltraFodaData.h"
 #include "WaveReader.h"
 #include "WaveWriter.h"
 
-enum compressMode {
-	NONE       = 0,
-	HUFFMAN    = 1,
-	DIFFERENCE = 2,
-	TRANSFORM  = 3
-};
 
 enum fileExtension {
-	eWAV,
-	eFUF
+	EXTENSION_WAV,
+	EXTENSION_FUF
 };
 
 class FUF {
-private:
-	WaveReader sample;
-	
+public:
+	WaveReader*           sample;
+	FormatoUltraFodaData* compressedData;
+
 	compressMode compression[COMPRESSION_MODE_COUNT];
-	int lastCompression;
+	int          lastCompression;
 
 	void huffmanCompress();
 	void differencialCompress();
@@ -38,27 +32,17 @@ private:
 	void transformDecompress();
 
 public:
-
-	FUF(const char* filename);
+	FUF() {}
 	~FUF();
 
 	void compress(compressMode);
 	void compress(compressMode, compressMode);
 	void compress(compressMode, compressMode, compressMode);
+
 	void decompress();
+
+    void readFromFile(const char* filename, fileExtension);
 	void writeToFile(const char* filename, fileExtension);
-
-//	friend std::istream& operator>> (std::istream& stream, const FUF& object);
-//	friend std::ostream& operator<< (std::ostream& stream, const FUF& object);
 };
-
-//std::istream& operator >> (std::istream& stream, const FUF& object){
-//	return stream;
-//}
-
-//std::ostream& operator << (std::ostream& stream, const FUF& object){
-//	return stream;
-//}
-
 
 #endif // FUF_H

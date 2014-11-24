@@ -79,7 +79,7 @@ WaveInfo WaveReader::readHeader() {
 	    chunkId = readInt32();
 	    switch (chunkId) {
 		    case FORMAT:
-		    	printf("Format\n");
+		    	//printf("Format\n");
 		        info.formatSize = readInt32();
 		        info.format = readInt16();
 		        info.channels = readInt16();
@@ -95,21 +95,21 @@ WaveInfo WaveReader::readHeader() {
 		        break;
 
 		    case RIFF_HEADER:
-		    	printf("Riff Header\n");
+		    	//printf("Riff Header\n");
 		        info.headerId = chunkId;
 		        info.memSize = readInt32();
 		        info.riffStyle = readInt32();
 		        break;
 
 		    case DATA:
-		    	printf("Data\n");
+		    	//printf("Data\n");
 		        dataChunk = true;
 		        info.dataSize = readInt32();
 		        break;
 
 		    default:
 		        int skipSize = readInt32();
-		        printf("Skip Size = %d\n", skipSize);
+		        //printf("Skip Size = %d\n", skipSize);
 		        fseek(mWavFile, skipSize, SEEK_CUR);
 		        break;
 	    }

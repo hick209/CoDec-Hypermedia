@@ -26,6 +26,7 @@
 *.exe
 *.out
 *.app
+codecF*Codec
 
 # Temporary files
 *~

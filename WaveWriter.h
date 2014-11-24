@@ -10,7 +10,7 @@ private:
 	const WaveInfo mInfo;
 	const WaveData mData;
 
-  FILE* mFile;
+    FILE* mFile;
 
 	void writeInt32(int data);
 	void writeInt16(int data);

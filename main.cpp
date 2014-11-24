@@ -5,6 +5,8 @@
 #include <map>
 
 #include "FUF.h"
+#include "Utils.h"
+
 
 #define USAGE "\
 Usage: " PROGRAM_NAME " OPTION FILE\n\
@@ -56,22 +58,37 @@ int main(int argc, char** argv) {
 
 
 	// Object Instance
-	FUF sample(filename.c_str());
+	FUF fuf;
 
-    if (option == "--deb") {
+    if (option == "--debug") {
         // Debug option!
 
         // TODO colocar código de depuração aqui!
+        fuf.readFromFile(filename.c_str(), EXTENSION_WAV);
+
+        printWavInfo(fuf.sample->info);
+
+//        fuf.compress(TRANSFORM);
+//        fuf.decompress();
+//        for (int c = 0; c < fuf.sample->data.channelCount; c++) {
+//            fuf.sample->data.data[c] = fuf.compressedData->getData(c);
+//        }
+
+//        fuf.writeToFile(noExtentionFilename.c_str(), EXTENSION_WAV);
 
         return EXIT_SUCCESS;
     }
 
 	if (option == "--dec") {
+	    fuf.readFromFile(filename.c_str(), EXTENSION_FUF);
+
 		cout << "Decompressing file " << filename << endl;
-        sample.decompress();
-		sample.writeToFile(noExtentionFilename.c_str(), eWAV);
+        fuf.decompress();
+		fuf.writeToFile(noExtentionFilename.c_str(), EXTENSION_WAV);
     }
     else {
+        fuf.readFromFile(filename.c_str(), EXTENSION_WAV);
+
         compressMode algorithm[] = { NONE, NONE, NONE };
         map<char, compressMode> compressMap;
         compressMap['h'] = HUFFMAN;
@@ -88,8 +105,9 @@ int main(int argc, char** argv) {
                 break;
         }
 
-        sample.compress(algorithm[0], algorithm[1], algorithm[2]);
-		sample.writeToFile(noExtentionFilename.c_str(), eFUF);
+        fuf.compress(algorithm[0], algorithm[1], algorithm[2]);
+        cout << "File compressed successfully!" << endl;
+		fuf.writeToFile(noExtentionFilename.c_str(), EXTENSION_FUF);
 	}
 
     return EXIT_SUCCESS;
@@ -120,7 +138,6 @@ bool processInput(int argc, char** argv, string& option, string &filename) {
 
     set<string> options;
     options.insert("-h");
-    options.insert("-d");
     options.insert("-dh");
     options.insert("-dt");
     options.insert("-dth");

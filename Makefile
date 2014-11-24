@@ -15,6 +15,7 @@ algorithms = \
         WaveReader \
         WaveWriter \
         FUF \
+        FormatoUltraFodaData \
         Huffman \
         Differencial \
         Transform \

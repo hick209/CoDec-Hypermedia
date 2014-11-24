@@ -2,24 +2,55 @@
 
 using namespace std;
 
-FUF::FUF(const char* filename)
-		: sample(filename), lastCompression(0) {
-	for (int i = 0; i < COMPRESSION_MODE_COUNT; i++) {
-		compression[i] = NONE;
-	}
-	sample.readWav();
+
+FUF::~FUF() {
+    delete sample;
+    delete compressedData;
 }
 
-FUF::~FUF() {}
+void FUF::readFromFile(const char* filename, fileExtension ext) {
+    if (ext == EXTENSION_WAV) {
+    	sample = new WaveReader(filename);
+	    for (int i = 0; i < COMPRESSION_MODE_COUNT; i++) {
+		    compression[i] = NONE;
+	    }
+	    lastCompression = 0;
 
-void FUF::writeToFile(const char* filename, fileExtension ext){
-	WaveWriter output(sample.info, sample.data);
-	
-	char* fname = (char*) malloc(strlen(filename) + 1);
-	strcpy(fname, filename);
-	
-	if (ext == eWAV) output.writeWav(strcat(fname, ".wav"));
-	else if (ext == eFUF) output.writeWav(strcat(fname, ".fuf"));
+	    sample->readWav();
+	    compressedData = new FormatoUltraFodaData(&(sample->data));
+    }
+	else if (ext == EXTENSION_FUF) {
+	    compressedData = new FormatoUltraFodaData(filename);
+	    lastCompression = compressedData->fHeader.compressCount;
+	    for (int i = 0; i < lastCompression; i++) {
+		    compression[i] = compressedData->fHeader.modes[i];
+	    }
+	}
+}
+
+void FUF::writeToFile(const char* filename, fileExtension ext) {
+	if (ext == EXTENSION_WAV) {
+	    WaveWriter output(sample->info, sample->data);
+
+	    string fname = string(filename) + ".wav";
+	    cout << "Writing file '" << fname << "'..." << endl;
+
+        output.writeWav(fname.c_str());
+	}
+	else if (ext == EXTENSION_FUF) {
+	    // Open the file
+        string fname = string(filename) + ".fuf";
+        FILE* file = fopen(fname.c_str(), "wb");
+
+        cout << "Writing file '" << fname << "'..." << endl;
+
+        // Write the headers
+        compressedData->writeHeaders(file, sample->info, compression, lastCompression);
+        // Write the data
+        compressedData->writeData(file);
+
+        fclose(file);
+	}
 }
 
 void FUF::compress(compressMode a) {
@@ -35,10 +66,12 @@ void FUF::compress(compressMode a) {
     		cout << "Applying Huffman..." << endl;
 			huffmanCompress();
 			break;
+
 		case DIFFERENCE:
 		    cout << "Applying Difference..." << endl;
 			differencialCompress();
 			break;
+
 		case TRANSFORM:
 		    cout << "Applying Transform..." << endl;
 			transformCompress();
@@ -68,14 +101,20 @@ void FUF::decompress(){
 		lastCompression--;
 		switch (compression[lastCompression]){
 			case HUFFMAN:
+			    cout << "Decompressing Huffman..." << endl;
 				huffmanDecompress();
 				break;
+
 			case DIFFERENCE:
+				cout << "Decompressing Difference..." << endl;
 				differencialDecompress();
 					break;
+
 			case TRANSFORM:
+			    cout << "Decompressing Transform..." << endl;
 				transformDecompress();
 				break;
+
 			case NONE:
 				break;
 		}

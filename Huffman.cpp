@@ -182,23 +182,23 @@ void printCode(Code code){
 void FUF::huffmanCompress() {
 	// Node vector with frequencias
 	// Count the frequencies
-		vector<Data> frequencies = countFrequency(sample.data);
+    vector<Data> frequencies = countFrequency(sample->data);
 
     // Mapped!
-    printFrequency(frequencies);
+//    printFrequency(frequencies);
 
     // Create the tree
     vector<TreeNode> tree;
 		
     for (unsigned int i = 0; i < frequencies.size(); i++) {
-        tree.push_back(TreeNode(frequencies[i]));
+//        tree.push_back(TreeNode(frequencies[i]));
     }
 
-		//Inserir a árvore dentro do arquivo
-		vector<Code> codeTable;
-		vector<int> code;
+	//Inserir a árvore dentro do arquivo
+	vector<Code> codeTable;
+	vector<int> code;
 		
-		generateCodeTable(&tree[0], codeTable, code);
+//	generateCodeTable(&tree[0], codeTable, code);
     // Ordenados!
 //    sortTreeNodes(tree);
 
