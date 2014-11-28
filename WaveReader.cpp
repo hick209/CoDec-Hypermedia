@@ -22,7 +22,7 @@ int WaveReader::readInt32() {
 	char buffer[4];
 	fread(buffer, 4, 1, mWavFile);
 
-	data = 0x00ff & buffer[3];
+	data += 0x00ff & buffer[3];
 	data = data << 8;
 	data += 0x00ff & buffer[2];
 	data = data << 8;
@@ -38,7 +38,7 @@ int WaveReader::readInt16() {
 	char buffer[2];
 	fread(buffer, 2, 1, mWavFile);
 
-	data = 0x00ff & buffer[1];
+	data += 0x00ff & buffer[1];
 	data = data << 8;
 	data += 0x00ff & buffer[0];
 

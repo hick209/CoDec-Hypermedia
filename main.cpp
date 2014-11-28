@@ -84,6 +84,7 @@ int main(int argc, char** argv) {
 
 		cout << "Decompressing file " << filename << endl;
         fuf.decompress();
+
 		fuf.writeToFile(noExtentionFilename.c_str(), EXTENSION_WAV);
     }
     else {

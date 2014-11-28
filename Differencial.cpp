@@ -18,6 +18,7 @@ void FUF::differencialCompress() {
 		for (int d = 1; d < dn; d++) {
 			diff[d] = data[d] - data[d - 1];
 		}
+
 		compressedData->setData(c, diff, dn);
 	}
 }
@@ -29,11 +30,11 @@ void FUF::differencialDecompress() {
 	for (int c = 0; c < cn; c++) {
     	int* diff = compressedData->getData(c);
 	    int* recv = new int[dn];
-
 		recv[0] = diff[0];
 		for (int d = 1; d < dn; d++) {
 			recv[d] = diff[d] + diff[d - 1];
 		}
+
 		compressedData->setData(c, recv, dn);
 	}
 }

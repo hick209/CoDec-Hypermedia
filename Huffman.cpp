@@ -189,7 +189,7 @@ void FUF::huffmanCompress() {
 
     // Create the tree
     vector<TreeNode> tree;
-		
+
     for (unsigned int i = 0; i < frequencies.size(); i++) {
 //        tree.push_back(TreeNode(frequencies[i]));
     }
@@ -197,7 +197,7 @@ void FUF::huffmanCompress() {
 	//Inserir a árvore dentro do arquivo
 	vector<Code> codeTable;
 	vector<int> code;
-		
+
 //	generateCodeTable(&tree[0], codeTable, code);
     // Ordenados!
 //    sortTreeNodes(tree);

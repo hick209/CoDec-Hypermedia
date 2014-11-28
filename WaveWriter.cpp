@@ -1,7 +1,7 @@
 #include "WaveWriter.h"
 
 WaveWriter::WaveWriter(WaveInfo info, WaveData data)
-  : mInfo(info), mData(data) {
+    : mInfo(info), mData(data) {
 }
 
 void WaveWriter::writeWav(const char* filename) {
@@ -16,31 +16,31 @@ void WaveWriter::writeWav(const char* filename) {
 }
 
 void WaveWriter::writeInt32(int data) {
-  unsigned char buffer[4];
+    unsigned char buffer[4];
 
 	buffer[0] = (0x000000ff & data) >>  0;
 	buffer[1] = (0x0000ff00 & data) >>  8;
 	buffer[2] = (0x00ff0000 & data) >> 16;
 	buffer[3] = (0xff000000 & data) >> 24;
 
-  fwrite(buffer, 4, 1, mFile);
+    fwrite(buffer, 4, 1, mFile);
 }
 
 void WaveWriter::writeInt16(int data) {
-  unsigned char buffer[2];
+    unsigned char buffer[2];
 
 	buffer[0] = (0x000000ff & data) >> 0;
 	buffer[1] = (0x0000ff00 & data) >> 8;
 
-  fwrite(buffer, 2, 1, mFile);
+    fwrite(buffer, 2, 1, mFile);
 }
 
 void WaveWriter::writeInt8(int data) {
-  unsigned char buffer[1];
+    unsigned char buffer[1];
 
-	buffer[0] = (0x000000ff & data);
+    buffer[0] = (0x000000ff & data);
 
-  fwrite(buffer, 1, 1, mFile);
+    fwrite(buffer, 1, 1, mFile);
 }
 
 void WaveWriter::write(int bytes, int data) {
@@ -82,8 +82,8 @@ void WaveWriter::writeHeader() {
 }
 
 void WaveWriter::writeData() {
-  int size = mData.dataLength;
-  int channels = mData.channelCount;
+    int size = mData.dataLength;
+    int channels = mData.channelCount;
 
 	int bytesPerSample;
 

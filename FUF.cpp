@@ -4,8 +4,8 @@ using namespace std;
 
 
 FUF::~FUF() {
-    delete sample;
-    delete compressedData;
+    if (sample)         delete sample;
+    if (compressedData) delete compressedData;
 }
 
 void FUF::readFromFile(const char* filename, fileExtension ext) {
@@ -30,9 +30,17 @@ void FUF::readFromFile(const char* filename, fileExtension ext) {
 
 void FUF::writeToFile(const char* filename, fileExtension ext) {
 	if (ext == EXTENSION_WAV) {
-	    WaveWriter output(sample->info, sample->data);
+        WaveData waveData;
+        waveData.channelCount = compressedData->fHeader.channelCount;
+        waveData.data = new int*[waveData.channelCount];
+        for (int i = 0; i< waveData.channelCount; i++) {
+            waveData.data[i] = compressedData->getData(i);
+        }
+        waveData.dataLength = compressedData->getDataLength();
+	    WaveWriter output(compressedData->fHeader.info, waveData);
 
 	    string fname = string(filename) + ".wav";
+
 	    cout << "Writing file '" << fname << "'..." << endl;
 
         output.writeWav(fname.c_str());

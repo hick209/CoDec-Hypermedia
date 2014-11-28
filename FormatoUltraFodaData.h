@@ -15,18 +15,18 @@ enum compressMode {
 };
 
 struct FUFHeader {
-    WaveInfo      info;
-    compressMode  modes[COMPRESSION_MODE_COUNT];
-    int           compressCount;
-    int           channelCount;
-    unsigned long huffmanHeaderSize;
-    unsigned long dataSize;
+    WaveInfo     info;
+    compressMode modes[COMPRESSION_MODE_COUNT];
+    int          bytesPerSample;
+    int          compressCount;
+    int          channelCount;
+    long         huffmanHeaderSize;
+    long         dataSize;
 };
 
 
 class FormatoUltraFodaData {
 private:
-
     int channelCount;
     int dataLength;
 

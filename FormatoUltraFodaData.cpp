@@ -21,6 +21,7 @@ FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
 
     // Prepare some content
     channelCount = fHeader.info.channels;
+    fHeader.bytesPerSample = (fHeader.info.bitDepth / channelCount) / 8;
 
     for (int i = 0; i < fHeader.compressCount; i++) {
         if (fHeader.modes[i] == TRANSFORM) {
@@ -31,6 +32,8 @@ FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
         }
     }
 
+    hasHuffman = false; // TODO
+
     // Read the data
     if (hasHuffman) {
         // TODO
@@ -39,14 +42,33 @@ FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
         fread(buffer, sizeof(char), huffSize, file); // TODO
     }
     else {
-        // Read the data
-        serialData = new int[fHeader.dataSize];
-        fread(serialData, sizeof(int), fHeader.dataSize, file);
-
         // Adapt the data
         dataLength = fHeader.dataSize / channelCount;
-        serialData = new int[channelCount*dataLength];
+
+        // Read the data
+        serialData = new int[fHeader.dataSize];
         data = new int*[channelCount];
+
+        int size = (dataLength * channelCount * fHeader.bytesPerSample);
+        unsigned char* buffer = new unsigned char[size];
+
+        for (int i = 0, j = 0; i < fHeader.dataSize && j < size; i++) {
+            serialData[i] = 0;
+            switch (fHeader.bytesPerSample) {
+                case 4:
+                	serialData[i] += 0x00ff & buffer[j++];
+                    serialData[i] = serialData[i] << 8;
+                	serialData[i] += 0x00ff & buffer[j++];
+                	serialData[i] = serialData[i] << 8;
+                case 2:
+                    serialData[i] += 0x00ff & buffer[j++];
+                    serialData[i] = serialData[i] << 8;
+                case 1:
+                    serialData[i] += 0x00ff & buffer[j++];
+                    break;
+            }
+        }
+
         for (int c = 0, j = 0; c < channelCount; c++) {
             data[c] = new int[dataLength];
             for (int i = 0; i < dataLength; i++, j++) {
@@ -105,9 +127,10 @@ void FormatoUltraFodaData::writeHeaders(FILE* file, WaveInfo info, compressMode*
     }
     fHeader.compressCount = compressCount;
     fHeader.channelCount = channelCount;
+    fHeader.bytesPerSample = (fHeader.info.bitDepth / channelCount) / 8;
 
     fHeader.huffmanHeaderSize = 0; // TODO change this
-    fHeader.dataSize = hasHuffman ? /* TODO Huff size */ 0 : dataLength;
+    fHeader.dataSize = hasHuffman ? /* TODO Huff size */ 0 : dataLength * channelCount;
 
     fwrite(&fHeader, sizeof(FUFHeader), 1, file);
 
@@ -117,12 +140,31 @@ void FormatoUltraFodaData::writeHeaders(FILE* file, WaveInfo info, compressMode*
 void FormatoUltraFodaData::writeData(FILE* file) {
     // write the data
     if (hasHuffman) {
-        char buffer[] = "Hello!"; // TODO
+        unsigned char buffer[] = "Hello!"; // TODO
         fwrite(buffer, sizeof(char), 7, file); // TODO
     }
     else {
-        int* buffer = getDataFromAllChannels();
-        fwrite(buffer, sizeof(int), dataLength*channelCount, file);
+printf("ok\n");
+        int* dataFull = getDataFromAllChannels();
+        int size = (dataLength * channelCount * fHeader.bytesPerSample);
+        unsigned char* buffer = new unsigned char[size];
+printf("ok\n");
+        for (int i = 0; i < size; ) {
+            unsigned int d = (unsigned int) dataFull[i];
+            switch (fHeader.bytesPerSample) {
+                case 4:
+                    buffer[i++] = (char) ((0xff000000 & d) >> 24);
+                    buffer[i++] = (char) ((0x00ff0000 & d) >> 16);
+                case 2:
+                    buffer[i++] = (char) ((0x0000ff00 & d) >>  8);
+                case 1:
+                    buffer[i++] = (char) ((0x000000ff & d) >>  0);
+                    break;
+            }
+        }
+
+        fwrite(buffer, sizeof(char), size, file);
+        delete buffer;
     }
 }
 
