@@ -144,11 +144,10 @@ void FormatoUltraFodaData::writeData(FILE* file) {
         fwrite(buffer, sizeof(char), 7, file); // TODO
     }
     else {
-printf("ok\n");
         int* dataFull = getDataFromAllChannels();
         int size = (dataLength * channelCount * fHeader.bytesPerSample);
         unsigned char* buffer = new unsigned char[size];
-printf("ok\n");
+
         for (int i = 0; i < size; ) {
             unsigned int d = (unsigned int) dataFull[i];
             switch (fHeader.bytesPerSample) {

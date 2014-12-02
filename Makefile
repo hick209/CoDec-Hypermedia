@@ -1,6 +1,7 @@
 CC = g++
 C_FLAGS =
 CPP_FLAGS = -I. -Wall --pedantic-errors
+OPTIMIZATION_FLAGS = -O3
 LD_FLAGS = -L.
 MAKE = make
 AR = ar
@@ -34,11 +35,11 @@ all_bin_lo = $(bin:%=%.lo)
 # General rules
 
 $(bin) : % : %.o lib$(LIB_CODEC).a
-	$(CC) $(DEFINES) $(LD_FLAGS) $(LDFLAGS) $(filter %.o, $^) -o $@ $(LIB)
+	$(CC) $(DEFINES) $(LD_FLAGS) $(LDFLAGS) $(OPTIMIZATION_FLAGS) $(filter %.o, $^) -o $@ $(LIB)
 	mv $@ $(PROGRAM_NAME)
 
 %.o : %.cpp
-	$(CC) $(DEFINES) $(CPP_FLAGS) $(CPPFLAGS) $(C_FLAGS) $(CFLAGS) -c  $< -o $@
+	$(CC) $(DEFINES) $(CPP_FLAGS) $(CPPFLAGS) $(C_FLAGS) $(CFLAGS) $(OPTIMIZATION_FLAGS) -c  $< -o $@
 
 %.lo : %.cpp
 	$(CC) $(DEFINES) $(CPP_FLAGS) $(CPPFLAGS) -MM -MT '$(<:.cpp=.o) $@' $< > $@

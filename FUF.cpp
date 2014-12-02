@@ -48,7 +48,7 @@ void FUF::writeToFile(const char* filename, fileExtension ext) {
 	else if (ext == EXTENSION_FUF) {
 	    // Open the file
         string fname = string(filename) + ".fuf";
-        FILE* file = fopen(fname.c_str(), "wb");
+        FILE* file = fopen("Test", "wb");
 
         cout << "Writing file '" << fname << "'..." << endl;
 

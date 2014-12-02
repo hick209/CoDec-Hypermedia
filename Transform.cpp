@@ -17,6 +17,9 @@ void FUF::transformCompress() {
     compressedData->zData = new double*[cn];
     for (int c = 0; c < cn; c++) {
         compressedData->zData[c] = new double[dn/2];
+    }
+
+    for (int c = 0; c < cn; c++) {
         modifiedDiscreteCosineTransform(compressedData->getData(c), dn, compressedData->zData[c]);
     }
     compressedData->hasTransform = true;
