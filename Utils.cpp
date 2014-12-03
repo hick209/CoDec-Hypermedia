@@ -35,3 +35,21 @@ void printWavData(WaveData d) {
 	}
 }
 
+
+void printFrequency(vector<Data> f) {
+    for (unsigned int i = 0; i < f.size(); i++) {
+        cout << "Element: " << f[i].first << " -> " << f[i].second << endl;
+    }
+}
+
+void printTree(TreeNode* t, int depth, string code) {
+    if (t == NULL) return;
+
+    if (t->left == NULL && t->right == NULL) {
+        cout << depth << " Element: " << t->d.first << " -> " << t->d.second << " = " << code << endl;
+    }
+    printTree(t->left,  depth+1, code+"1");
+    printTree(t->right, depth+1, code+"0");
+}
+
+

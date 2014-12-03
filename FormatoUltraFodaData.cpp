@@ -4,7 +4,6 @@
 using namespace std;
 
 FormatoUltraFodaData::FormatoUltraFodaData(WaveData* wdata) {
-
     hasHuffman = false;
     hasTransform = false;
     zData = NULL;
@@ -17,14 +16,15 @@ FormatoUltraFodaData::FormatoUltraFodaData(WaveData* wdata) {
 }
 
 FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
-	hasHuffman = false;
-	hasTransform = false;
+    hasHuffman = false;
+    hasTransform = false;
+    zData = NULL;
+    data = NULL;
+    serialData = NULL;
 
     FILE* file = fopen(filename, "rb");
     // Read the FUF header
     fread(&fHeader, sizeof(FUFHeader), 1, file);
-    // Read the huffman
-//    fread(huffHeader, sizeof(HuffmanHeader), fHeader.huffmanHeaderSize, file); // TODO
 
     // Prepare some content
     channelCount = fHeader.info.channels;
@@ -39,27 +39,24 @@ FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
         }
     }
 
-    hasHuffman = false; // TODO
+    // Read the data
+
+    // Adapt the data
+    dataLength = fHeader.dataSize / channelCount;
 
     // Read the data
+    data = new int*[channelCount];
+
     if (hasHuffman) {
-        // TODO
-        int huffSize = 7;
-        char* buffer = new char[huffSize]; // TODO
-        fread(buffer, sizeof(char), huffSize, file); // TODO
+        // Read the huffman
+        huff.readFile(file);
     }
     else {
-        // Adapt the data
-        dataLength = fHeader.dataSize / channelCount;
-
-        // Read the data
-        serialData = new int[fHeader.dataSize];
-        data = new int*[channelCount];
-
         int size = (dataLength * channelCount * fHeader.bytesPerSample);
         unsigned char* buffer = new unsigned char[size];
 		fread(buffer, sizeof(char), size, file);
 
+        serialData = new int[fHeader.dataSize];
         for (int i = 0, j = 0; i < fHeader.dataSize && j < size; i++) {
             serialData[i] = 0;
             switch (fHeader.bytesPerSample) {
@@ -136,19 +133,29 @@ void FormatoUltraFodaData::writeHeaders(FILE* file, WaveInfo info, compressMode*
     fHeader.channelCount = channelCount;
     fHeader.bytesPerSample = (fHeader.info.bitDepth / channelCount) / 8;
 
-    fHeader.huffmanHeaderSize = 0; // TODO change this
-    fHeader.dataSize = hasHuffman ? /* TODO Huff size */ 0 : dataLength * channelCount;
+    fHeader.dataSize = dataLength * channelCount;
 
     fwrite(&fHeader, sizeof(FUFHeader), 1, file);
 
-    // TODO write huffman header
+    // Write huffman header
+    if (hasHuffman) {
+        HuffmanHeader huffHeader = huff.getHeader();
+        fwrite(&huffHeader, sizeof(HuffmanHeader), 1, file);
+    }
 }
 
 void FormatoUltraFodaData::writeData(FILE* file) {
     // write the data
     if (hasHuffman) {
-        unsigned char buffer[] = "Hello!"; // TODO
-        fwrite(buffer, sizeof(char), 7, file); // TODO
+        HuffmanHeader huffHeader = huff.getHeader();
+
+        int* frequencies = huff.getFrequencies();
+        fwrite(frequencies, sizeof(int), huffHeader.sampleCount*2, file);
+        delete[] frequencies;
+
+        Byte* bytes = huff.getData();
+        fwrite(bytes, sizeof(Byte), huffHeader.byteCount, file);
+        delete[] bytes;
     }
     else {
         int* dataFull = getDataFromAllChannels();

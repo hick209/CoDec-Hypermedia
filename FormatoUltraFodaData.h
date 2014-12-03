@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include "Wave.h"
+#include "Huffman.h"
 
 
 enum compressMode {
@@ -33,8 +34,6 @@ private:
     int** data;
     int*  serialData;
 
-    // TODO add Huffman stuff
-
 public:
 	FormatoUltraFodaData(WaveData*);
 	FormatoUltraFodaData(const char* filename);
@@ -52,6 +51,7 @@ public:
     void writeData(FILE*);
 
     FUFHeader fHeader;
+    Huffman   huff;
 	double**  zData;
 	char*     hData;
 

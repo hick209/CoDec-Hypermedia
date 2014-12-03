@@ -15,6 +15,7 @@ void FUF::transformCompress() {
     int dn = compressedData->getDataLength();
 
     compressedData->zData = new double*[cn];
+
     for (int c = 0; c < cn; c++) {
         compressedData->zData[c] = new double[dn/2];
     }

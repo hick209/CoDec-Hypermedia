@@ -31,3 +31,4 @@ codecF*Codec
 # Temporary files
 *~
 *statckdump
+*.fuf

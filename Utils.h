@@ -2,6 +2,8 @@
 #define UTILS_H
 
 #include "WaveReader.h"
+#include "Huffman.h"
+#include <string>
 
 /**
  *  This is an util library.
@@ -17,6 +19,17 @@ void printWavInfo(WaveInfo);
  *  Print wav data
  */
 void printWavData(WaveData);
+
+
+/**
+ *  Print frequency vector
+ */
+void printFrequency(vector<Data> f);
+
+/**
+ *  Print Huffman tree
+ */
+void printTree(TreeNode* t, int depth = 1, string code = "");
 
 
 #endif // UTILS_H
