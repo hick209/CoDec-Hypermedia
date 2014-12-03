@@ -16,9 +16,9 @@ https://github.com/hick209/CoDec-Hypermedia.git
 
 
  **Grupo:**
-	- Larissa Cardoso Zimmermann 	7126879
-	- Nivaldo Henrique Bondanca	7143909
-	- Raphael Victor Ferreira	7143889
+	* Larissa Cardoso Zimmermann 	7126879
+	* Nivaldo Henrique Bondanca	7143909
+	* Raphael Victor Ferreira	7143889
 
 
 ###REQUERIMENTOS
