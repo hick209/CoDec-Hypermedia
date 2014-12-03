@@ -217,7 +217,7 @@ void Huffman::readFile(FILE* file) {
     delete[] bytes;
 
     buildTree(frequencies);
-printFrequency(frequencies); // TODO
+
     lastByteBitCount = header.lastByteBitCount;
 }
 
@@ -229,7 +229,7 @@ void FUF::huffmanCompress() {
     vector<Data> frequencies = countFrequency(samples, size);
 
     // Mapped!
-    printFrequency(frequencies); // TODO
+//    printFrequency(frequencies);
 
     // Create the tree
     compressedData->huff.buildTree(frequencies);
