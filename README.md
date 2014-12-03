@@ -35,19 +35,25 @@ Basta executar o comando make na pasta do projeto para gerar o executavel codecF
 ###EXECUCAO
 
 * Lista de comandos disponiveis
-	Para uma descricao completa de todos os comandos disponiveis, execute no terminal:
+
+Para uma descricao completa de todos os comandos disponiveis, execute no terminal:
 	`./codecFuckingFodaCodec.exe --help`
 
+
 * Compressao
-	Um exemplo de chamada de compressao por diferencas + huffman para o arquivo teste.wav seria:
+
+Um exemplo de chamada de compressao por diferencas + huffman para o arquivo teste.wav seria:
 	`./codecFuckingFodaCodec.exe -dh teste.wav`
 
+
 * Descompressao 
-	O arquivo .fuf guarda as compressoes realizadas sobre o arquivo .wav na ordem em que foram realizadas. Logo, para a descompressao de qualquer arquivo .fuf, a chamada será a mesma. Um exemplo de chamada de descompressao para o arquivo teste.fuf seria:
+
+O arquivo .fuf guarda as compressoes realizadas sobre o arquivo .wav na ordem em que foram realizadas. Logo, para a descompressao de qualquer arquivo .fuf, a chamada será a mesma. Um exemplo de chamada de descompressao para o arquivo teste.fuf seria:
 	`./codecFuckingFodaCodec.exe --dec teste.fuf`
 
 
 ###TROUBLESHOOTING
 
 * Segmentation Fault
-	O programa tem a capacidade de escrever 2 tipos de arquivos diferentes: Um arquivo ".fuf" a partir da compressao de um arquivo ".wav" ou um arquivo ".wav" a partir da descompressao do arquivo ".fuf". Para evitar receber segmentation fault como erro, cheque se a solicitacao de compressao foi realizada a partir de um arquivo ".wav" e a solicitacao de descompressao foi realizada para um arquivo ".fuf".
+
+O programa tem a capacidade de escrever 2 tipos de arquivos diferentes: Um arquivo ".fuf" a partir da compressao de um arquivo ".wav" ou um arquivo ".wav" a partir da descompressao do arquivo ".fuf". Para evitar receber segmentation fault como erro, cheque se a solicitacao de compressao foi realizada a partir de um arquivo ".wav" e a solicitacao de descompressao foi realizada para um arquivo ".fuf".
