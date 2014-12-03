@@ -117,7 +117,6 @@ void FUF::decompress(){
 			case DIFFERENCE:
 				cout << "Decompressing Difference..." << endl;
 				differencialDecompress();
-				cout << "Yo mama!" << endl;
 				break;
 
 			case TRANSFORM:

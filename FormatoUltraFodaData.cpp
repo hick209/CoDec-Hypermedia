@@ -19,6 +19,7 @@ FormatoUltraFodaData::FormatoUltraFodaData(WaveData* wdata) {
 FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
 	hasHuffman = false;
 	hasTransform = false;
+	zData = NULL;
 
     FILE* file = fopen(filename, "rb");
     // Read the FUF header

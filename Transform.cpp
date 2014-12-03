@@ -7,7 +7,7 @@
 using namespace std;
 
 void modifiedDiscreteCosineTransform(const int* x, int size, double* z);
-void inverseModifiedDiscreteCosineTransform(const double* z, int size, int* x);
+void inverseModifiedDiscreteCosineTransform(const int* z, int size, int* x);
 
 
 void FUF::transformCompress() {
@@ -26,12 +26,11 @@ void FUF::transformCompress() {
 }
 
 void FUF::transformDecompress() {
-    int cn = compressedData->getChannelCount();
+	int cn = compressedData->getChannelCount();
     int dn = compressedData->getDataLength();
-
     for (int c = 0; c < cn; c++) {
-        int* data = new int[dn * 2];
-        inverseModifiedDiscreteCosineTransform(compressedData->zData[c], dn, data);
+		int* data = new int[dn * 2];
+        inverseModifiedDiscreteCosineTransform(compressedData->getData(c), dn, data);
         compressedData->setData(c, data, dn*2);
     }
     compressedData->hasTransform = false;
@@ -51,18 +50,18 @@ void modifiedDiscreteCosineTransform(const int* x, int size, double* z) {
 }
 
 
-void inverseModifiedDiscreteCosineTransform(const double* z, int size, int* x) {
+void inverseModifiedDiscreteCosineTransform(const int* z, int size, int* x) {
     double* xk = new double[size];
     for (int i = 0; i < size; i++) {
         xk[i] = 0;
     }
-
+	
     for (int k = 0; k < size; k++) {
         for (int i = 0; i < size/2; i++) {
             xk[k] += z[i] * cos( M_PI / (2*size) * (2*k + 1 + size/2) * (2*i + 1) );
         }
     }
-
+	
     for (int i = 0; i < size; i++) {
         x[i] = (int) xk[i];
     }
