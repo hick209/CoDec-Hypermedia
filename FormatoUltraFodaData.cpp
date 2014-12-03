@@ -1,7 +1,10 @@
 #include "FormatoUltraFodaData.h"
+#include <iostream>
 
+using namespace std;
 
 FormatoUltraFodaData::FormatoUltraFodaData(WaveData* wdata) {
+
     hasHuffman = false;
     hasTransform = false;
     zData = NULL;
@@ -12,7 +15,11 @@ FormatoUltraFodaData::FormatoUltraFodaData(WaveData* wdata) {
     channelCount = wdata->channelCount;
     dataLength = wdata->dataLength;
 }
+
 FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
+	hasHuffman = false;
+	hasTransform = false;
+
     FILE* file = fopen(filename, "rb");
     // Read the FUF header
     fread(&fHeader, sizeof(FUFHeader), 1, file);
@@ -51,6 +58,7 @@ FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
 
         int size = (dataLength * channelCount * fHeader.bytesPerSample);
         unsigned char* buffer = new unsigned char[size];
+		fread(buffer, sizeof(char), size, file);
 
         for (int i = 0, j = 0; i < fHeader.dataSize && j < size; i++) {
             serialData[i] = 0;
@@ -76,7 +84,6 @@ FormatoUltraFodaData::FormatoUltraFodaData(const char* filename) {
             }
         }
     }
-
     fclose(file);
 }
 

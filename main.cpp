@@ -19,6 +19,7 @@ OPTION specify decompression or the type of compression algorithm.\n\
 \n\
 Compress options:\n\
   -h    Huffman compression\n\
+  -d	Differencial\n\
   -dh   Differencial, Huffman compression\n\
   -dt   Differencial, Transform compression\n\
   -dth  Differencial, Transform, Huffman compression\n\
@@ -139,6 +140,7 @@ bool processInput(int argc, char** argv, string& option, string &filename) {
 
     set<string> options;
     options.insert("-h");
+	options.insert("-d");
     options.insert("-dh");
     options.insert("-dt");
     options.insert("-dth");

@@ -29,6 +29,7 @@ void FUF::readFromFile(const char* filename, fileExtension ext) {
 }
 
 void FUF::writeToFile(const char* filename, fileExtension ext) {
+
 	if (ext == EXTENSION_WAV) {
         WaveData waveData;
         waveData.channelCount = compressedData->fHeader.channelCount;
@@ -48,7 +49,7 @@ void FUF::writeToFile(const char* filename, fileExtension ext) {
 	else if (ext == EXTENSION_FUF) {
 	    // Open the file
         string fname = string(filename) + ".fuf";
-        FILE* file = fopen("Test", "wb");
+        FILE* file = fopen(fname.c_str(), "wb");
 
         cout << "Writing file '" << fname << "'..." << endl;
 
@@ -116,7 +117,8 @@ void FUF::decompress(){
 			case DIFFERENCE:
 				cout << "Decompressing Difference..." << endl;
 				differencialDecompress();
-					break;
+				cout << "Yo mama!" << endl;
+				break;
 
 			case TRANSFORM:
 			    cout << "Decompressing Transform..." << endl;

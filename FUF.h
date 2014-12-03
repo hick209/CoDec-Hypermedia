@@ -32,7 +32,7 @@ public:
 	void transformDecompress();
 
 public:
-	FUF() {}
+	FUF():sample(NULL),compressedData(NULL){}
 	~FUF();
 
 	void compress(compressMode);
